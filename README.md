@@ -3,7 +3,7 @@ Brain dump for website change notifier:
 
 # Brief Description
 
-A little tool written in Go that will take a web address as an input and informs you when something has changed
+Partly an experiment, A little tool written in Go that will take a web address as an input and informs you when something has changed
 
 
 
@@ -25,7 +25,7 @@ it will allow you to specify where and how it should store the result or even em
 - accept a signal to end the active listener
 
 # Things to find out
-  - How to store the document bodies in a nice compressed way and also to allow for fast diffing later   
-  - How can go be used a cron job? can it be run in the background? how can we terminate it? 
-  - How to scale it to millions of registered websites and listeners
-
+  1. Find a way to use a two-way hash function so we can store the body but also recover it for diffing later, very similar to how git stores the whole snapshot of changes  
+  2. Find out how to send an email 
+  3. How can go be used a cron job? can it be run in the background? how can we terminate it? 
+  4. How to scale it to millions of registered websites and listeners
