@@ -1,1 +1,3 @@
 sendgrid.env
+snapshots/
+config.json

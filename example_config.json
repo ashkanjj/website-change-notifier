@@ -1,0 +1,16 @@
+{
+  "fromEmail": {
+    "name": "ash",
+    "email": "from@email.com"
+  },
+  "toEmail": {
+    "name": "testUser",
+    "email": "to@email.com"
+  },
+  "recipients": [
+    {
+      "name": "ash",
+      "email": "ash@ash.com"
+    }
+  ]
+}

@@ -1,35 +1,52 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/gosimple/slug"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"log"
+	"regexp"
 	"time"
 )
 
-// parse the address from cli
-// if no snapshot has been created for the address, create the file
-// timer code every 5 second
-// -- fetch the body of the website
-// -- read file and if no file for this address, create it with the content
-// -- compare the content of the body with what's stored
-func main() {
+var configFile = "./config.json" //TODO check how other delcare their consts
 
-	address := "http://localhost:8000/"
-	// address := "https://www.swedenabroad.se/en/about-abroad-for-swedish-citizens/united-kingdom/service-to-swedish-citizens/passport-abroad/passports-for-adults/"
-	snapshotFile := "./" + slug.Make(address)
+func main() {
+	var url = flag.String("url", "", "URL to load")
+	flag.Parse()
+
+	if *url == "" {
+		log.Fatal("Need the url")
+	}
+
+	// Load configuration
+	config, configError := ConfigFile(configFile).Parse()
+	if configError != nil {
+		log.Fatal("Failed to parse the config file", configError)
+	}
+	var recipients []Recipient
+
+	for i := 0; i < len(config.Recipients); i++ {
+		recipients = append(recipients, Recipient{Name: config.Recipients[i].Name, Email: config.Recipients[i].Email})
+	}
+
+	snapshotFile := "./" + slug.Make(*url) // make the url friendly for storage
 
 	snapshot := Snapshot{directory: "./snapshots", src: snapshotFile}
-	recipients := make([]Recipient, 2)
-	recipients[0] = Recipient{name: "Ash Shahabi", email: "ashkanshahabi@gmail.com"}
-	recipients[1] = Recipient{name: "maneli", email: "manelishahabi@gmail.com"}
 
-	fromEmail := Recipient{name: "Ash Shahabi", email: "ashshahabi1@gmail.com"}
-	email := EmailService{recipients: recipients, fromEmail: fromEmail}
-	err := snapshot.SaveFile("") // create or overwrite the file with empty content so I can read it later
+	email := EmailService{recipients: recipients, fromEmail: config.FromEmail}
+
+	// Initially fetch address' body
+	f := Fetcher{url: *url}
+	htmlBody, err := f.Content()
 	if err != nil {
-		log.Fatal("error saving the file", err.Error())
+		log.Fatal(err)
+	}
+	saveError := snapshot.SaveFile(htmlBody)
+	log.Println("Web URL:", *url)
+	if saveError != nil {
+		log.Fatal("Error initially saving the file", err.Error())
 	}
 
 	ticker := time.NewTicker(time.Second * 5)
@@ -41,10 +58,9 @@ func main() {
 	for {
 		select {
 		case <-done:
-			fmt.Println("done..why would this be called?")
-		case t := <-ticker.C:
-			fmt.Println("tick", t)
-			f := Fetcher{url: address}
+			fmt.Println("Done channel called!")
+		case <-ticker.C:
+			fmt.Println("tick")
 			htmlBody, err := f.Content()
 			if err != nil {
 				log.Print(err)
@@ -52,28 +68,34 @@ func main() {
 			}
 			fileContent, err := snapshot.ReadFile()
 			if err != nil {
-				log.Print("error reading the file", err.Error())
+				log.Print("Error reading the file", err.Error())
 				return
 			}
-			if len(fileContent) == 0 {
-				// empty file therefore nothing to compare, save the fileContent instead
-				log.Println("empty file...saving htmlBody instead")
-				snapshot.SaveFile(htmlBody)
+			hb := cleanup(htmlBody)
+			fc := cleanup(fileContent)
+			if hb != fc {
+				log.Println("Body has changed...inform the user")
+				diffs := dmp.DiffMain(fc, hb, false)
+				plainTextDiff := dmp.DiffPrettyText(diffs)
+				htmlDiff := dmp.DiffPrettyHtml(diffs)
+				email.Send("Website change notifier", plainTextDiff, htmlDiff)
+				// overwrite the file.
+				snapshot.SaveFile(hb)
+				break
 			} else {
-				if htmlBody != fileContent {
-					log.Println("body has changed...inform the user")
-					diffs := dmp.DiffMain(fileContent, htmlBody, false)
-					plainTextDiff := dmp.DiffPrettyText(diffs)
-					htmlDiff := dmp.DiffPrettyHtml(diffs)
-					email.Send("Website change notifier", plainTextDiff, htmlDiff)
-					log.Println("DONE")
-					done <- true
-					break
-				} else {
-					log.Println("body is the same")
-				}
+				log.Println("No change")
 			}
 		}
 	}
 
+}
+
+func cleanup(str string) string {
+	// add a slice of things to cleanup
+
+	// TODO: remove the lines including certain strings using Regex.MustCompile and replaceAllStrings to excludes things like cookie reminders
+	// example:
+	// re := regexp.MustCompile("(?m)[\r\n]+^.*search-filters-.*$")
+	// res := re.ReplaceAllString(str, "")
+	return str
 }

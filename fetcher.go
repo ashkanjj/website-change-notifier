@@ -15,7 +15,11 @@ type Fetcher struct {
 }
 
 func (f Fetcher) Content() (string, error) {
+
 	resp, err := http.Get(f.url)
+	if err != nil {
+		return "", err
+	}
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", errors.New("error reading body")

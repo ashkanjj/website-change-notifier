@@ -13,7 +13,6 @@ it will store snapshots of the webpages (only the body) (but it will need to sto
 
 it will allow you to specify where and how it should store the result or even email it to you
 
-
 # TODO
 - Parse the cli for:
   - Web address to listen for
@@ -29,3 +28,22 @@ it will allow you to specify where and how it should store the result or even em
   2. Find out how to send an email 
   3. How can go be used a cron job? can it be run in the background? how can we terminate it? 
   4. How to scale it to millions of registered websites and listeners
+
+
+# Run in background
+
+Different systems have different ways to run processes in the background and the answer is normally a google search away.
+
+I use Ubuntu on Windows (WSL) and I do the following:
+
+go build
+nohup ./go-websiteChangeNotifier &
+(copy the process ID that is's outputted)
+tail -f nohup.out (watch the logs)
+
+
+# How to run
+
+go run main.go snapshot.go fetcher.go email.go config.go -url=http://localhost:8000 -config=./config.json 
+
+// TODO: add steps to install

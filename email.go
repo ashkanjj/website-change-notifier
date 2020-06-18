@@ -7,22 +7,18 @@ import (
 	"os"
 )
 
-type Recipient struct {
-	name, email string
-}
-
 type EmailService struct {
 	recipients []Recipient
 	fromEmail  Recipient
 }
 
 func (e *EmailService) Send(subject string, textContent string, htmlContent string) error {
-	from := mail.NewEmail(e.fromEmail.name, e.fromEmail.email)
+	from := mail.NewEmail(e.fromEmail.Name, e.fromEmail.Email)
 	s := subject
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 
 	for i := 0; i < len(e.recipients); i++ {
-		to := mail.NewEmail(e.recipients[i].name, e.recipients[i].email)
+		to := mail.NewEmail(e.recipients[i].Name, e.recipients[i].Email)
 		message := mail.NewSingleEmail(from, s, to, textContent, htmlContent)
 		response, err := client.Send(message)
 		log.Println("email response", response)
