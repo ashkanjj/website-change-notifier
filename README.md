@@ -36,14 +36,16 @@ Different systems have different ways to run processes in the background and the
 
 I use Ubuntu on Windows (WSL) and I do the following:
 
+```sh
 go build
 nohup ./go-websiteChangeNotifier &
 (copy the process ID that is's outputted)
 tail -f nohup.out (watch the logs)
-
+```
 
 # How to run
 
+```sh
 go run main.go snapshot.go fetcher.go email.go config.go -url=http://localhost:8000 -config=./config.json 
-
+```
 // TODO: add steps to install
