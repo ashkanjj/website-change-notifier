@@ -1,4 +1,4 @@
-package main
+package websiteChangeNotifier
 
 import (
 	"io/ioutil"
@@ -6,7 +6,8 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	var configFile ConfigFile = "./example_config.json"
+
+	var configFile EmailConfig = "./example_config.json"
 	configContent, readError := ioutil.ReadFile(string(configFile))
 
 	if readError != nil {

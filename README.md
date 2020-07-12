@@ -15,7 +15,7 @@ it will allow you to specify where and how it should store the result or even em
 
 # TODO
 - Parse the cli for:
-  - Web address to listen for
+  - |~~Web address to listen for~~
   - An email address or a google cloud/AWS email service in which case a config file
 - Take a snapshot of the current state of web document's body and store it
 - start the cron job (or we can just call it listener) and have it running forever
@@ -32,7 +32,7 @@ it will allow you to specify where and how it should store the result or even em
 
 # Run in background
 
-Different systems have different ways to run processes in the background and the answer is normally a google search away.
+Different systems have different ways to run processes in the background and the solution for any OS is typically only a google search away.
 
 I use Ubuntu on Windows (WSL) and I do the following:
 

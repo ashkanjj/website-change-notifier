@@ -1,12 +1,12 @@
-package main
+package websiteChangeNotifier
 
 import (
 	"io/ioutil"
 )
 
 type Snapshot struct {
-	directory string
-	src       string
+	Directory string
+	Src       string
 }
 
 func (s Snapshot) ReadFile() (string, error) {
@@ -24,5 +24,5 @@ func (s Snapshot) SaveFile(content string) error {
 }
 
 func (s Snapshot) PathToFile() string {
-	return s.directory + "/" + s.src
+	return s.Directory + "/" + s.Src
 }

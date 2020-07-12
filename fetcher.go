@@ -1,4 +1,4 @@
-package main
+package websiteChangeNotifier
 
 import (
 	"bytes"
@@ -11,12 +11,12 @@ import (
 )
 
 type Fetcher struct {
-	url string
+	Url string
 }
 
 func (f Fetcher) Content() (string, error) {
 
-	resp, err := http.Get(f.url)
+	resp, err := http.Get(f.Url)
 	if err != nil {
 		return "", err
 	}
