@@ -9,7 +9,7 @@ type Snapshot struct {
 	Src       string
 }
 
-func (s Snapshot) ReadFile() (string, error) {
+func (s Snapshot) Read() (string, error) {
 	content, err := ioutil.ReadFile(s.PathToFile())
 	return string(content), err
 }

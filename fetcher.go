@@ -14,7 +14,7 @@ type Fetcher struct {
 	Url string
 }
 
-func (f Fetcher) Content() (string, error) {
+func (f Fetcher) Fetch() (string, error) {
 
 	resp, err := http.Get(f.Url)
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	configFile = "../../config.json" //TODO check how other delcare their consts
+	emailConfigFile = "./config.json" //TODO check how other delcare their consts
 )
 
 func main() {
@@ -23,17 +23,17 @@ func main() {
 	}
 
 	// Load email configuration
-	emailConfig := wcn.EmailConfig(configFile)
+	emailConfig := wcn.EmailConfig(emailConfigFile)
 
 	email, emailSetupError := wcn.NewEmailService(&emailConfig)
 
 	if emailSetupError != nil {
-		log.Fatal("Failed to load email setup error", emailSetupError)
+		log.Fatal("Email setup error", emailSetupError)
 	}
 
 	// Initially fetch address' body
-	f := wcn.Fetcher{Url: *url}
-	htmlBody, err := f.Content()
+	fetcher := wcn.Fetcher{Url: *url}
+	htmlBody, err := fetcher.Fetch()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,24 +47,33 @@ func main() {
 		log.Fatal("Error initially saving the file", err.Error())
 	}
 
+	process(&fetcher, &snapshot, email)
+
+}
+
+type EmailSender interface {
+	Send(subject string, textContent string, htmlContent string) error
+}
+
+func process(f *wcn.Fetcher, snapshot *wcn.Snapshot, email EmailSender) {
+
 	ticker := time.NewTicker(time.Second * 5)
 
-	done := make(chan bool)
-
+	doneChan := make(chan bool)
 	dmp := diffmatchpatch.New()
 
 	for {
 		select {
-		case <-done:
+		case <-doneChan:
 			fmt.Println("Done channel called!")
 		case <-ticker.C:
 			fmt.Println("tick")
-			htmlBody, err := f.Content()
+			htmlBody, err := f.Fetch()
 			if err != nil {
 				log.Print(err)
 				return
 			}
-			fileContent, err := snapshot.ReadFile()
+			fileContent, err := snapshot.Read()
 			if err != nil {
 				log.Print("Error reading the file", err.Error())
 				return
@@ -77,7 +86,7 @@ func main() {
 				plainTextDiff := dmp.DiffPrettyText(diffs)
 				htmlDiff := dmp.DiffPrettyHtml(diffs)
 				email.Send("Website change notifier", plainTextDiff, htmlDiff)
-				// overwrite the file.
+				// overwrite the file with the new content.
 				snapshot.SaveFile(hb)
 				break
 			} else {
@@ -85,7 +94,6 @@ func main() {
 			}
 		}
 	}
-
 }
 
 func cleanup(str string) string {
