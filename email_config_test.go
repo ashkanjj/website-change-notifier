@@ -1,24 +1,17 @@
 package websiteChangeNotifier
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestParse(t *testing.T) {
 
 	var configFile EmailConfig = "./example_config.json"
-	configContent, readError := ioutil.ReadFile(string(configFile))
+	_, configReadError := os.Stat(string(configFile))
 
-	if readError != nil {
+	if configReadError != nil {
 		t.Fatal("Couldn't read the example config file: ", configFile)
-	}
-
-	var fileContent []byte = []byte(configContent)
-	writeFileErr := ioutil.WriteFile(string(configFile), fileContent, 0644)
-
-	if writeFileErr != nil {
-		t.Fatal("Couldn't create the temp config file")
 	}
 
 	json, err := configFile.Parse()

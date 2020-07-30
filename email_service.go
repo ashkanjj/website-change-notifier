@@ -7,6 +7,23 @@ import (
 	"os"
 )
 
+func NewEmailService(EmailConfig *EmailConfig) (*EmailService, error) {
+	// Load email configuration
+	var recipients []Recipient
+	emailConfig, configError := EmailConfig.Parse()
+
+	if configError != nil {
+		return nil, configError
+
+	}
+
+	for i := 0; i < len(emailConfig.Recipients); i++ {
+		recipients = append(recipients, Recipient{Name: emailConfig.Recipients[i].Name, Email: emailConfig.Recipients[i].Email})
+	}
+
+	return &EmailService{Recipients: recipients, FromEmail: emailConfig.FromEmail}, nil
+}
+
 type EmailService struct {
 	Recipients []Recipient
 	FromEmail  Recipient
@@ -27,21 +44,4 @@ func (e *EmailService) Send(subject string, textContent string, htmlContent stri
 		}
 	}
 	return nil
-}
-
-func NewEmailService(EmailConfig *EmailConfig) (*EmailService, error) {
-	// Load email configuration
-	var recipients []Recipient
-	emailConfig, configError := EmailConfig.Parse()
-
-	if configError != nil {
-		return nil, configError
-
-	}
-
-	for i := 0; i < len(emailConfig.Recipients); i++ {
-		recipients = append(recipients, Recipient{Name: emailConfig.Recipients[i].Name, Email: emailConfig.Recipients[i].Email})
-	}
-
-	return &EmailService{Recipients: recipients, FromEmail: emailConfig.FromEmail}, nil
 }

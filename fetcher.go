@@ -26,7 +26,7 @@ func (f Fetcher) Fetch() (string, error) {
 	}
 	defer resp.Body.Close()
 	doc, _ := html.Parse(strings.NewReader(string(responseBody)))
-	bn, err := Body(doc)
+	bn, err := HTMLBody(doc)
 	if err != nil {
 		return "", errors.New("error in Body")
 	}
@@ -34,7 +34,7 @@ func (f Fetcher) Fetch() (string, error) {
 	return body, nil
 }
 
-func Body(doc *html.Node) (*html.Node, error) {
+func HTMLBody(doc *html.Node) (*html.Node, error) {
 	// copied from the top answer in https://stackoverflow.com/questions/30109061/golang-parse-html-extract-all-content-with-body-body-tags
 	var body *html.Node
 	var crawler func(*html.Node)
