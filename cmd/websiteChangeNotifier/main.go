@@ -3,21 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
-	wcn "github.com/ashkanjj/go-websiteChangeNotifier"
-	"github.com/gosimple/slug"
 	"log"
 	"os"
 	"time"
+
+	wcn "github.com/ashkanjj/go-websiteChangeNotifier"
 )
 
 var (
 	url             = flag.String("url", "", "URL to load")
 	emailConfigFile = flag.String("config", "", "Config file")
+	snapshotFolder  = flag.String("snapshotFolder", "", "Snapshot folder")
 )
 
 func main() {
 
 	dir, err := os.Getwd()
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,6 +35,31 @@ func main() {
 		log.Fatal("Need the config file")
 	}
 
+	if *snapshotFolder == "" {
+		log.Fatal("Need the snapshot folder")
+
+	}
+
+	// Initially fetch address' body
+	fetcher := wcn.Fetcher{Url: *url}
+	htmlBody, err := fetcher.Fetch()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	snapshot, err := wcn.NewSnapshot(*snapshotFolder, *url)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Web URL:", *url)
+
+	if saveError := snapshot.Save(htmlBody); saveError != nil { //save the body of what was returned
+		log.Fatal("Error initially saving the file", saveError.Error())
+	}
+
 	// Load email configuration
 	emailConfig := wcn.EmailConfig(*emailConfigFile)
 
@@ -40,22 +67,6 @@ func main() {
 
 	if emailSetupError != nil {
 		log.Fatal("Email setup error", emailSetupError)
-	}
-
-	// Initially fetch address' body
-	fetcher := wcn.Fetcher{Url: *url}
-	htmlBody, err := fetcher.Fetch()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	snapshotFile := "./" + slug.Make(*url) // sluggify the input url for use as a file name
-	snapshot := wcn.Snapshot{Directory: "../../snapshots", Src: snapshotFile}
-
-	saveError := snapshot.SaveFile(htmlBody)
-	log.Println("Web URL:", *url)
-	if saveError != nil {
-		log.Fatal("Error initially saving the file", saveError.Error())
 	}
 
 	wcn.Process(&fetcher, &snapshot, email, time.Second*5, false)

@@ -2,9 +2,10 @@ package websiteChangeNotifier
 
 import (
 	"fmt"
-	"github.com/sergi/go-diff/diffmatchpatch"
 	"log"
 	"time"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 type EmailSender interface {
@@ -16,8 +17,8 @@ type FetcherFetch interface {
 }
 
 type SnapshotReaderAndSaver interface {
-	Read() (string, error)
-	SaveFile(content string) error
+	ReadLatest() (string, error)
+	Save(content string) error
 }
 
 func Process(f FetcherFetch, snapshot SnapshotReaderAndSaver, email EmailSender, interval time.Duration, terminateOnChange bool) {
@@ -33,28 +34,36 @@ func Process(f FetcherFetch, snapshot SnapshotReaderAndSaver, email EmailSender,
 			return
 		case <-ticker.C:
 			fmt.Println("tick")
-			snapshotContent, err := snapshot.Read()
+
+			snapshotContent, err := snapshot.ReadLatest()
+
 			if err != nil {
 				log.Print("Error reading the file", err.Error())
 				return
 			}
+
 			htmlContent, err := f.Fetch()
+
 			if err != nil {
 				log.Print("Error fetching the HTML", err)
 				return
 			}
+
 			hb := cleanup(htmlContent)
 			sc := cleanup(snapshotContent)
+
 			if hb != sc {
-				log.Println("Body has changed...inform the user")
 				diffs := dmp.DiffMain(sc, hb, false)
 				plainTextDiff := dmp.DiffPrettyText(diffs)
 				htmlDiff := dmp.DiffPrettyHtml(diffs)
+
+				log.Println("Body has changed...inform the user")
+
 				email.Send("Website change notifier", plainTextDiff, htmlDiff)
 
-				// overwrite the file with the new content.
-				snapshot.SaveFile(hb)
+				snapshot.Save(hb)
 				fmt.Println("finish")
+
 				if terminateOnChange {
 					go func() {
 						fmt.Println("should be terminated")
@@ -62,10 +71,13 @@ func Process(f FetcherFetch, snapshot SnapshotReaderAndSaver, email EmailSender,
 						done <- true
 					}()
 				}
+
 				break
+
 			} else {
 				log.Println("No change...")
 			}
+
 		}
 	}
 }

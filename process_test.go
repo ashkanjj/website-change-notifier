@@ -21,7 +21,7 @@ func (s TestSnapshot) Read() (string, error) {
 	return s.content, nil
 }
 
-func (s *TestSnapshot) SaveFile(content string) error {
+func (s *TestSnapshot) Save(content string) error {
 	// overwrite content with what's passed in
 	s.content = content
 

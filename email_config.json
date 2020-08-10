@@ -1,0 +1,16 @@
+{
+  "fromEmail": {
+    "name": "Ash Shahabi",
+    "email": "ashshahabi1@gmail.com"
+  },
+  "recipients": [
+    {
+      "name": "Ash Shahabi",
+      "email": "ashkanshahabi@gmail.com"
+    },
+    {
+      "name": "maneli",
+      "email": "manelishahabi@gmail.com"
+    }
+  ]
+}
