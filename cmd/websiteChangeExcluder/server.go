@@ -1,8 +1,8 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -31,15 +31,38 @@ func main() {
 	}
 
 	fileServer := http.FileServer(http.Dir("./static"))
+	http.HandleFunc("/api/websites", getWebsitesHandler(snapshotFolder))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/index.html")
 	})
-	log.Println("Listening on :3000...")
+	log.Println("Listening on :8080...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func getWebsites(folder string) ([]string, error) {
+func getWebsitesHandler(snapshotFolder *string) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		websites, err := getWebsites(*snapshotFolder)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		websitesJSON, err := json.Marshal(websites)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadGateway)
+		}
+
+		w.Write(websitesJSON)
+	}
+}
+
+type Website struct {
+	Name string `json:"name"`
+}
+
+func getWebsites(folder string) ([]Website, error) {
 	_, err := os.Stat(folder)
 
 	if err != nil {
@@ -51,11 +74,10 @@ func getWebsites(folder string) ([]string, error) {
 		return nil, err
 	}
 
-	var directories = make([]string, len(fileInfoDirectories))
+	var directories []Website
 
 	for _, f := range fileInfoDirectories {
-		fmt.Println("f is: ", f.Name(), f.IsDir())
-		directories = append(directories, f.Name())
+		directories = append(directories, Website{Name: f.Name()})
 	}
 
 	return directories, nil
