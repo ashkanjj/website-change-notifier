@@ -14,7 +14,6 @@ export class OnScreenMatrix {
   ): string | null {
     let nextItem;
     const matrix = this.matrix;
-
     matrix.forEach((outer, outerIndex) => {
       outer.forEach((inner, innerIndex) => {
         if (inner === selected) {

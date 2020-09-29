@@ -4,11 +4,9 @@ import { Website, Snapshot } from "../../../types";
 import styled from "styled-components";
 import SecondaryHeading from "../../../components/SecondaryHeading";
 import { OnScreenMatrix, Direction } from "../onScreenMatrix";
-import { useScreenKeyPress } from "../../../contexts/OnScreenKeyPressProvider";
 import useDocumentKeyPress from "../../../contexts/useDocumentKeyPress";
 
 interface IWebsiteListProps {
-  snapshots: Snapshot[];
   websites: Website[];
 }
 
@@ -18,11 +16,11 @@ interface SelectedItem {
 }
 
 export const WebsiteList = (props: IWebsiteListProps) => {
-  const { snapshots, websites } = props;
+  const { websites } = props;
   const [selectedItem, setSelectedItem] = useState<string>(
     websites[0].name || ""
   );
-  // const snapshots = useSnapshots();
+  const snapshots = useSnapshots();
 
   const matrix = useMemo(() => {
     const wids = websites.map((d) => d.name);
@@ -31,10 +29,10 @@ export const WebsiteList = (props: IWebsiteListProps) => {
   }, [websites, snapshots]);
 
   function onKeyPress(e: KeyboardEvent) {
-    const validKeycode = directionBasedOnKeyCode(e.keyCode);
+    const direction = directionBasedOnKeyCode(e.keyCode);
     let nextItem = null;
-    if (validKeycode) {
-      nextItem = matrix.findNextItemInMatrix(selectedItem, validKeycode);
+    if (direction) {
+      nextItem = matrix.findNextItemInMatrix(selectedItem, direction);
     }
     if (nextItem) {
       setSelectedItem(nextItem);

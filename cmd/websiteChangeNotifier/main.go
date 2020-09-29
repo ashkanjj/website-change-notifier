@@ -2,28 +2,21 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-	"os"
 	"time"
 
 	wcn "github.com/ashkanjj/go-websiteChangeNotifier"
+	bolt "go.etcd.io/bbolt"
 )
 
 var (
 	url             = flag.String("url", "", "URL to load")
 	emailConfigFile = flag.String("config", "", "Config file")
-	snapshotFolder  = flag.String("snapshotFolder", "", "Snapshot folder")
 )
 
 func main() {
 
-	dir, err := os.Getwd()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("dir", dir)
+	var db *bolt.DB
 
 	flag.Parse()
 
@@ -35,29 +28,37 @@ func main() {
 		log.Fatal("Need the config file")
 	}
 
-	if *snapshotFolder == "" {
-		log.Fatal("Need the snapshot folder")
-
+	db, err := bolt.Open("my.db", 0600, nil)
+	if err != nil {
+		log.Fatal("error connecting to the db", err)
 	}
-
-	// Initially fetch address' body
-	fetcher := wcn.Fetcher{Url: *url}
-	htmlBody, err := fetcher.Fetch()
+	defer db.Close()
+	website, err := wcn.NewWebsite(*url, db)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("error saving the website to db", err)
 	}
 
-	snapshot, err := wcn.NewSnapshot(*snapshotFolder, *url)
+	// db.View(func(tx *bolt.Tx) error {
+	// 	b := tx.Bucket([]byte("Website"))
+	// 	c := b.Cursor()
+
+	// 	for k, v := c.First(); k != nil; k, v = c.Next() {
+	// 		fmt.Printf("key=%s, value=%s\n", k, v)
+	// 	}
+	// 	return nil
+	// })
+	// Initially fetch the website content
+	htmlBody, err := website.Fetch()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("error in fetching the website", err)
 	}
 
-	log.Println("Web URL:", *url)
+	snapshot := wcn.NewSnapshot(website.ID, db)
 
 	if saveError := snapshot.Save(htmlBody); saveError != nil { //save the body of what was returned
-		log.Fatal("Error initially saving the file", saveError.Error())
+		log.Fatal("Error initially saving the content", saveError.Error())
 	}
 
 	// Load email configuration
@@ -69,5 +70,5 @@ func main() {
 		log.Fatal("Email setup error", emailSetupError)
 	}
 
-	wcn.Process(&fetcher, &snapshot, email, time.Second*5, false)
+	wcn.Process(&website, &snapshot, email, time.Second*5, false)
 }

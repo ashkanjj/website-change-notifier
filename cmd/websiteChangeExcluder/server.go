@@ -63,9 +63,8 @@ type Website struct {
 }
 
 func getWebsites(folder string) ([]Website, error) {
-	_, err := os.Stat(folder)
 
-	if err != nil {
+	if _, err := os.Stat(folder); err != nil {
 		return nil, err
 	}
 
@@ -77,6 +76,7 @@ func getWebsites(folder string) ([]Website, error) {
 	var directories []Website
 
 	for _, f := range fileInfoDirectories {
+		
 		directories = append(directories, Website{Name: f.Name()})
 	}
 
