@@ -6,7 +6,6 @@ import (
 	"time"
 
 	wcn "github.com/ashkanjj/go-websiteChangeNotifier"
-	bolt "go.etcd.io/bbolt"
 )
 
 var (
@@ -15,8 +14,6 @@ var (
 )
 
 func main() {
-
-	var db *bolt.DB
 
 	flag.Parse()
 
@@ -28,7 +25,7 @@ func main() {
 		log.Fatal("Need the config file")
 	}
 
-	db, err := bolt.Open("my.db", 0600, nil)
+	db, err := wcn.NewDB()
 	if err != nil {
 		log.Fatal("error connecting to the db", err)
 	}
@@ -39,15 +36,6 @@ func main() {
 		log.Fatal("error saving the website to db", err)
 	}
 
-	// db.View(func(tx *bolt.Tx) error {
-	// 	b := tx.Bucket([]byte("Website"))
-	// 	c := b.Cursor()
-
-	// 	for k, v := c.First(); k != nil; k, v = c.Next() {
-	// 		fmt.Printf("key=%s, value=%s\n", k, v)
-	// 	}
-	// 	return nil
-	// })
 	// Initially fetch the website content
 	htmlBody, err := website.Fetch()
 
@@ -70,5 +58,5 @@ func main() {
 		log.Fatal("Email setup error", emailSetupError)
 	}
 
-	wcn.Process(&website, &snapshot, email, time.Second*5, false)
+	wcn.Process(website, snapshot, email, time.Second*5, false)
 }

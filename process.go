@@ -36,7 +36,6 @@ func Process(f FetcherFetch, snapshot SnapshotReaderAndSaver, email EmailSender,
 			fmt.Println("tick")
 
 			snapshotContent, err := snapshot.ReadLatest()
-
 			if err != nil {
 				log.Print("Error reading the file", err.Error())
 				return

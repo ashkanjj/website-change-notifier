@@ -13,15 +13,15 @@ func (t TestFetch) Fetch() (string, error) {
 	return t.content, nil
 }
 
-type TestSnapshot struct {
+type TestSnapshotInProcess struct {
 	content string
 }
 
-func (s TestSnapshot) Read() (string, error) {
+func (s TestSnapshotInProcess) ReadLatest() (string, error) {
 	return s.content, nil
 }
 
-func (s *TestSnapshot) Save(content string) error {
+func (s *TestSnapshotInProcess) Save(content string) error {
 	// overwrite content with what's passed in
 	s.content = content
 
@@ -46,7 +46,7 @@ func (T *TestEmailSender) Send(subject string, textContent string, htmlContent s
 func TestProcessWithChange(t *testing.T) {
 
 	fetcher := TestFetch{content: "This is my content"}
-	snapshot := TestSnapshot{content: "This is some other content"}
+	snapshot := TestSnapshotInProcess{content: "This is some other content"}
 	email := TestEmailSender{Emails: make([]MockEmail, 0)}
 	Process(fetcher, &snapshot, &email, time.Second*1, true)
 

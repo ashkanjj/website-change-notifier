@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gosimple/slug"
-	bolt "go.etcd.io/bbolt"
 	"golang.org/x/net/html"
 )
 
@@ -20,7 +19,7 @@ type Website struct {
 }
 
 // Fetch uses http.Get to fetch the website
-func (w Website) Fetch() (string, error) {
+func (w *Website) Fetch() (string, error) {
 
 	resp, err := http.Get(w.URL)
 	if err != nil {
@@ -41,21 +40,14 @@ func (w Website) Fetch() (string, error) {
 }
 
 // NewWebsite creates a new instace of Website
-func NewWebsite(url string, db *bolt.DB) (Website, error) {
+func NewWebsite(url string, store Store) (*Website, error) {
 	id := createWebsiteID(url)
 	// Inser the website into the db
-	err := db.Update(func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("Website"))
-		if err != nil {
-			return err
-		}
-		err = b.Put(id, []byte(url))
-		return err
-	})
-	return Website{URL: url, ID: string(id)}, err
+	err := store.CreateWebsite(id, url)
+	return &Website{URL: url, ID: string(id)}, err
 }
 
-func createWebsiteID(url string) []byte {
+func createWebsiteID(url string) string {
 	// create a directory for the snapshot if one doesn't exist
 	slug := slug.Make(url) // sluggify the input url for use as a folder name
 	var slugNameMaxChar int
@@ -65,7 +57,7 @@ func createWebsiteID(url string) []byte {
 		slugNameMaxChar = 30
 	}
 	slug = slug[0:slugNameMaxChar] // limit the length to 30 to avoid long file names
-	return []byte(slug)
+	return slug
 }
 
 func htmlBody(doc *html.Node) (*html.Node, error) {
