@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/ashkanjj/go-websiteChangeNotifier/db"
 	"github.com/gosimple/slug"
 	"golang.org/x/net/html"
 )
@@ -40,7 +41,7 @@ func (w *Website) Fetch() (string, error) {
 }
 
 // NewWebsite creates a new instace of Website
-func NewWebsite(url string, store Store) (*Website, error) {
+func NewWebsite(url string, store db.Store) (*Website, error) {
 	id := createWebsiteID(url)
 	// Inser the website into the db
 	err := store.CreateWebsite(id, url)

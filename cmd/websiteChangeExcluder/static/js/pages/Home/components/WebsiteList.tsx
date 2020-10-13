@@ -5,6 +5,7 @@ import styled from "styled-components";
 import SecondaryHeading from "../../../components/SecondaryHeading";
 import { OnScreenMatrix, Direction } from "../onScreenMatrix";
 import useDocumentKeyPress from "../../../contexts/useDocumentKeyPress";
+import useSnapshots from "../../../hooks/useSnapshots";
 
 interface IWebsiteListProps {
   websites: Website[];
@@ -20,15 +21,15 @@ export const WebsiteList = (props: IWebsiteListProps) => {
   const [selectedItem, setSelectedItem] = useState<string>(
     websites[0].name || ""
   );
-  const snapshots = useSnapshots();
+  // const snapshots = useSnapshots();
 
   const matrix = useMemo(() => {
     const wids = websites.map((d) => d.name);
-    const sids = snapshots.map((d) => d.id);
-    return new OnScreenMatrix(wids, sids);
-  }, [websites, snapshots]);
+    // const sids = snapshots.map((d) => d.id);
+    return new OnScreenMatrix(wids);
+  }, [websites]);
 
-  function onKeyPress(e: KeyboardEvent) {
+  function handleOnKeyPress(e: KeyboardEvent) {
     const direction = directionBasedOnKeyCode(e.keyCode);
     let nextItem = null;
     if (direction) {
@@ -39,7 +40,7 @@ export const WebsiteList = (props: IWebsiteListProps) => {
     }
   }
 
-  useDocumentKeyPress("body", onKeyPress);
+  useDocumentKeyPress("body", handleOnKeyPress);
 
   return (
     <React.Fragment>
@@ -52,9 +53,9 @@ export const WebsiteList = (props: IWebsiteListProps) => {
         </ListSection>
         <ListSection>
           <SecondaryHeading>Snapshots</SecondaryHeading>
-          {snapshots.map((snap, i) => (
+          {/* {snapshots.map((snap, i) => (
             <ListItem data={snap} selected={selectedItem === snap.id} />
-          ))}
+          ))} */}
         </ListSection>
       </ListContainer>
     </React.Fragment>

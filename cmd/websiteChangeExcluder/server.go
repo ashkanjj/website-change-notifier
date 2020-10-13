@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/ashkanjj/go-websiteChangeNotifier/db"
 )
 
 // This should serve a SPA static server
@@ -30,8 +32,14 @@ func main() {
 		panic("Need the snapshot folder")
 	}
 
+	db, err := db.NewDB()
+
+	if err != nil {
+		log.Fatal("error connecting to the db", err)
+	}
+
 	fileServer := http.FileServer(http.Dir("./static"))
-	http.HandleFunc("/api/websites", getWebsitesHandler(snapshotFolder))
+	http.HandleFunc("/api/websites", getWebsitesHandler(db))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/index.html")
@@ -40,7 +48,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func getWebsitesHandler(snapshotFolder *string) func(http.ResponseWriter, *http.Request) {
+func getWebsitesHandler(store db.Store) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		websites, err := getWebsites(*snapshotFolder)
 
@@ -76,7 +84,7 @@ func getWebsites(folder string) ([]Website, error) {
 	var directories []Website
 
 	for _, f := range fileInfoDirectories {
-		
+
 		directories = append(directories, Website{Name: f.Name()})
 	}
 

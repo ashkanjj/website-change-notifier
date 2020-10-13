@@ -27,9 +27,7 @@ const Home = () => {
     <>
       <MainParagraph>Website Change Excluder</MainParagraph>
       <WebsitesContainer>
-        {websites.length > 0 && (
-          <WebsiteList websites={websites} snapshots={snapshots} />
-        )}
+        {websites.length > 0 && <WebsiteList websites={websites} />}
       </WebsitesContainer>
     </>
   );

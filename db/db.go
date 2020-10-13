@@ -1,4 +1,4 @@
-package websiteChangeNotifier
+package db
 
 import (
 	"bytes"
@@ -26,7 +26,7 @@ type DB struct {
 
 type SortByDate []SnapshotTemp
 
-const utcFormat = "2006-01-02T15:04:05Z07:00"
+const UTCFormat = "2006-01-02T15:04:05Z07:00"
 
 func NewDB() (*DB, error) {
 	db, err := bolt.Open("my.db", 0600, nil)
@@ -70,7 +70,7 @@ func (d *DB) LatestSnapshot(prefix string) (string, error) {
 
 		for k, v := c.Seek(pr); k != nil && bytes.HasPrefix(k, pr); k, v = c.Next() {
 			timePortionOfKey := bytes.ReplaceAll(k, []byte(fmt.Sprintf("%s:", prefix)), []byte(""))
-			pt, err := time.Parse(utcFormat, string(timePortionOfKey))
+			pt, err := time.Parse(UTCFormat, string(timePortionOfKey))
 			if err != nil {
 				return err
 			}

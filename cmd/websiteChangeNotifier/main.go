@@ -6,6 +6,7 @@ import (
 	"time"
 
 	wcn "github.com/ashkanjj/go-websiteChangeNotifier"
+	"github.com/ashkanjj/go-websiteChangeNotifier/db"
 )
 
 var (
@@ -25,7 +26,7 @@ func main() {
 		log.Fatal("Need the config file")
 	}
 
-	db, err := wcn.NewDB()
+	db, err := db.NewDB()
 	if err != nil {
 		log.Fatal("error connecting to the db", err)
 	}
