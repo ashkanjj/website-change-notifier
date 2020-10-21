@@ -24,7 +24,7 @@ tail -f nohup.out (watch the logs)
 OR
 
 ```sh
-go run main.go snapshot.go fetcher.go email.go config.go -url=http://localhost:8000 -config=./config.json
+go run main.go -url=http://localhost:8090 -config=../../email_config.json -bolt-path=./my.db
 ```
 
 # Longer Description
