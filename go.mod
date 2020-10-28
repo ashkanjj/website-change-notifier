@@ -3,7 +3,7 @@ module github.com/ashkanjj/go-websiteChangeNotifier
 go 1.13
 
 require (
-	github.com/boltdb/bolt v1.3.1 // indirect
+	github.com/boltdb/bolt v1.3.1
 	github.com/boltdb/boltd v0.0.0-20150220181201-1f04e2021e45 // indirect
 	github.com/br0xen/boltbrowser v0.0.0-20200408202924-14bd1cdd41fd // indirect
 	github.com/gosimple/slug v1.9.0

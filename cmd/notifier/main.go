@@ -16,7 +16,7 @@ import (
 var (
 	url             = flag.String("url", "", "URL to load")
 	emailConfigFile = flag.String("config", "", "Config file")
-	boltPath        = flag.String("bolt-path", "", "Bolt db path")
+	dbpath          = flag.String("dbpath", "", "Bolt db path")
 )
 
 func main() {
@@ -31,7 +31,9 @@ func main() {
 		log.Fatal("Need the config file")
 	}
 
-	storage, err := bolt.NewStorage(*boltPath)
+	storage, err := bolt.NewStorage(*dbpath)
+	defer storage.Close()
+
 	if err != nil {
 		log.Fatal("error connecting to storage", err)
 	}

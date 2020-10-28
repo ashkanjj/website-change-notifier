@@ -1,6 +1,6 @@
 package listing
 
 type Website struct {
-	ID  string
-	URL string
+	ID  string `json:"id"`
+	URL string `json:"url"`
 }
