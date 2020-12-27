@@ -6,10 +6,9 @@ import SecondaryHeading from "../../../components/SecondaryHeading";
 import { OnScreenMatrix, Direction } from "../onScreenMatrix";
 import useDocumentKeyPress from "../../../contexts/useDocumentKeyPress";
 import useSnapshots from "../../../hooks/useSnapshots";
+import useWebsites from "../../../hooks/useWebsites";
 
-interface IWebsiteListProps {
-  websites: Website[];
-}
+interface IWebsiteListProps {}
 
 interface SelectedItem {
   name: string;
@@ -17,11 +16,15 @@ interface SelectedItem {
 }
 
 export const WebsiteList = (props: IWebsiteListProps) => {
-  const { websites } = props;
-  const [selectedItem, setSelectedItem] = useState<string>(
-    websites[0].id || ""
-  );
-  // const snapshots = useSnapshots();
+  const { isLoading, websites } = useWebsites();
+  const [selectedItem, setSelectedItem] = useState<string>();
+
+  useEffect(() => {
+    if (websites.length) {
+      setSelectedItem(websites[0].id);
+    }
+  }, [websites]);
+
 
   const matrix = useMemo(() => {
     const wids = websites.map((d) => d.id);
@@ -89,7 +92,7 @@ const ListItem = (props: WebsiteItemProps) => {
   const Paragraph = selected ? WebsiteParagraphSelected : WebsiteParagraph;
   return (
     <React.Fragment key={data.id}>
-      <Paragraph>{data.id}</Paragraph>
+      <Paragraph>{data.url}</Paragraph>
     </React.Fragment>
   );
 };

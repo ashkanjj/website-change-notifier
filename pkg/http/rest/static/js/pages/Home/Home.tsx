@@ -22,12 +22,14 @@ const snapshots = [
 }));
 
 const Home = () => {
-  const { isLoading, websites } = useWebsites();
+
+  // TODO: load the snapshots here based on the selected WebsiteList which we get from WebsiteList
+  // const snapshots = useSnapshots();
   return (
     <>
       <MainParagraph>Website Change Excluder</MainParagraph>
       <WebsitesContainer>
-        {websites.length > 0 && <WebsiteList websites={websites} />}
+        <WebsiteList />
       </WebsitesContainer>
     </>
   );

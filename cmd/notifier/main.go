@@ -20,7 +20,6 @@ var (
 )
 
 func main() {
-
 	flag.Parse()
 
 	if *url == "" {
@@ -30,6 +29,7 @@ func main() {
 	if *emailConfigFile == "" {
 		log.Fatal("Need the config file")
 	}
+
 
 	storage, err := bolt.NewStorage(*dbpath)
 	defer storage.Close()

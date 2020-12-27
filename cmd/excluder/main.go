@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -12,7 +13,9 @@ import (
 
 var (
 	dbpath = flag.String("dbpath", "", "Bolt db path")
+	port = "8000"
 )
+
 
 func main() {
 	flag.Parse()
@@ -32,6 +35,7 @@ func main() {
 	lister := listing.NewService(storage)
 
 	handler := rest.Handler(lister)
-	log.Fatal(http.ListenAndServe(":8000", handler))
+	log.Print(fmt.Sprintf("Listening on %s", port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), handler))
 
 }
