@@ -18,6 +18,7 @@ func Handler(l *listing.Service) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/websites", getWebsites(l))
+	mux.HandleFunc("/api/snapshots", getSnapshots(l))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		index := fmt.Sprintf("%s/index.html", static)
@@ -26,6 +27,23 @@ func Handler(l *listing.Service) *http.ServeMux {
 
 	return mux
 }
+
+
+func getSnapshots(l *listing.Service) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		// TODO: here
+		query := r.URL.Query()
+		websiteID := query.Get("websiteId")
+		data, err := l.GetSnapshotsByWebsite(websiteID)
+
+		if err != nil {
+			http.Error(w, "Error getting snapshots", http.StatusInternalServerError)
+		}
+		json.NewEncoder(w).Encode(data)
+	}
+}
+
 
 func getWebsites(l *listing.Service) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -40,3 +58,4 @@ func getWebsites(l *listing.Service) func(http.ResponseWriter, *http.Request) {
 		json.NewEncoder(w).Encode(ws)
 	}
 }
+

@@ -98,7 +98,6 @@ func (d *Storage) CreateSnapshot(s adding.Snapshot) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("value?", s.Value)
 		return b.Put(d.createSnapshotKey(s), []byte(s.Value))
 	})
 
@@ -126,8 +125,9 @@ func (d *Storage) GetAllWebsiteSnapshots(webID string) ([]listing.Snapshot, erro
 
 	})
 
-	for _, v := range snapshots {
-		snapshots = append(snapshots, listing.Snapshot{Value: v.Value, Date: v.Date, WebsiteID: v.WebsiteID})
+
+	for _, v := range s {
+		snapshots = append(snapshots, listing.Snapshot{ID: v.ID, WebsiteID: v.WebsiteID, Value: v.Value, Date: v.Date})
 	}
 
 	return snapshots, err
@@ -139,7 +139,6 @@ func (d *Storage) LatestSnapshot(prefix string) (listing.Snapshot, error) {
 	err := d.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("Snapshot"))
 		c := b.Cursor()
-
 		pr := []byte(prefix)
 		for k, v := c.Seek([]byte(pr)); k != nil && bytes.HasPrefix(k, pr); k, v = c.Next() {
 			snapshot, err := d.parseKeyValueAsSnapshot(k, v)
@@ -150,14 +149,12 @@ func (d *Storage) LatestSnapshot(prefix string) (listing.Snapshot, error) {
 		}
 		return nil
 	})
-
 	if err != nil {
 		return listing.Snapshot{}, err
 	}
 	sort.Sort(SortByDate(snapshots))
-	fmt.Printf("sorted %s", snapshots)
 
-	s := listing.Snapshot{WebsiteID: snapshots[0].WebsiteID, Date: snapshots[0].Date, Value: snapshots[0].Value}
+	s := listing.Snapshot{ID: snapshots[0].ID, WebsiteID: snapshots[0].WebsiteID, Date: snapshots[0].Date, Value: snapshots[0].Value}
 
 	return s, nil
 }
@@ -186,6 +183,6 @@ func (d *Storage) parseKeyValueAsSnapshot(key []byte, value []byte) (Snapshot, e
 		return Snapshot{}, err
 	}
 
-	return Snapshot{WebsiteID: webID, Date: parsedTime, Value: string(value)}, nil
+	return Snapshot{ID: string(key), WebsiteID: webID, Date: parsedTime, Value: string(value)}, nil
 
 }

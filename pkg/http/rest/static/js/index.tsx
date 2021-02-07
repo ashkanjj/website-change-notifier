@@ -12,7 +12,8 @@ import Menu from "./components/Menu";
 
 const GlobalStyle = createGlobalStyle`
 body {
-  background-color: ${(props) => props.theme.bg}
+  background-color: ${(props) => props.theme.bg};
+  overflow-y: scroll; 
 }
 `;
 

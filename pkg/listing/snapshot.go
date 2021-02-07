@@ -3,7 +3,8 @@ package listing
 import "time"
 
 type Snapshot struct {
-	WebsiteID string
-	Date      time.Time
-	Value     string
+	ID string `json:"id"`
+	WebsiteID string `json:"websiteId"`
+	Date      time.Time `json:"date"`
+	Value     string `json:"value"`
 }

@@ -4,15 +4,23 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "@types/jest": "^26.0.19",
+    "babel-jest": "^26.6.3",
     "css-loader": "^4.3.0",
     "file-loader": "^6.1.0",
+    "jest": "^26.6.3",
     "style-loader": "^1.2.1",
     "webpack": "^5.10.1",
     "webpack-cli": "^4.2.0"
   },
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch --progress"
+    "watch": "webpack --watch --progress",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",

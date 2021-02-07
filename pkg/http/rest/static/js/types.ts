@@ -1,6 +1,8 @@
 export interface Snapshot {
-  name: string;
   id: string;
+  websiteId: string;
+  date: string;
+  value: string;
 }
 
 export interface Website {

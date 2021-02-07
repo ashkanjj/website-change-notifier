@@ -2,21 +2,31 @@ import { zip } from "lodash";
 
 export type Direction = "up" | "down" | "left" | "right";
 
+export type MatrixItem = { type: string; id: string };
+
 export class OnScreenMatrix {
-  private matrix: string[][];
+  private matrix: MatrixItem[][];
+  private currentArrays: [][];
   constructor(...arrays) {
+    this.currentArrays = arrays;
     this.matrix = zip(...arrays);
+    console.log("matrix", this.matrix);
+  }
+
+  public addNewArray(arr) {
+    this.currentArrays = [...this.currentArrays, arr];
+    this.matrix = zip(...this.currentArrays);
   }
 
   public findNextItemInMatrix(
     selected: string,
     direction: Direction
-  ): string | null {
+  ): MatrixItem {
     let nextItem;
     const matrix = this.matrix;
     matrix.forEach((outer, outerIndex) => {
       outer.forEach((inner, innerIndex) => {
-        if (inner === selected) {
+        if (inner && inner.id === selected) {
           switch (direction) {
             case "down": {
               let outerItem = matrix[outerIndex + 1];

@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import SecondaryHeading from "../../components/SecondaryHeading";
+import useSnapshots from "../../hooks/useSnapshots";
 import useWebsites from "../../hooks/useWebsites";
-import { WebsiteList } from "./components/WebsiteList";
+import { WebsiteSnapshots } from "./components/WebsiteSnapshots";
 
 const MainParagraph = styled.p`
   font-size: ${(props) => props.theme.fontSize["3xl"]};
-`;
-
-const WebsitesContainer = styled.div`
-  width: 100%;
 `;
 
 const snapshots = [
@@ -22,15 +20,10 @@ const snapshots = [
 }));
 
 const Home = () => {
-
-  // TODO: load the snapshots here based on the selected WebsiteList which we get from WebsiteList
-  // const snapshots = useSnapshots();
   return (
     <>
       <MainParagraph>Website Change Excluder</MainParagraph>
-      <WebsitesContainer>
-        <WebsiteList />
-      </WebsitesContainer>
+      <WebsiteSnapshots />
     </>
   );
 };

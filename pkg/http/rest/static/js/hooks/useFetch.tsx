@@ -22,7 +22,7 @@ function useFetch<T>(url: string) {
       setIsLoading(false);
     };
 
-    fetchData();
+    url && fetchData();
   }, [url]);
 
   return {
