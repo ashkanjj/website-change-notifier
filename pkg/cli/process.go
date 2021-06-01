@@ -12,11 +12,13 @@ import (
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
-func Process(adder *adding.Service, fetcher *fetching.Service, lister *listing.Service, emailSender *email.Service, url string, interval time.Duration, terminateOnChange bool) {
+func Process(adder *adding.Service, lister *listing.Service, emailSender *email.Service, url string, interval time.Duration, terminateOnChange bool) {
 	website, err := adder.AddWebsite(url)
 	if err != nil {
 		log.Fatal("error adding the website")
 	}
+
+	fetcher := fetching.NewService(url)
 
 	// Initially fetch the website content
 	htmlBody, err := fetcher.Fetch()

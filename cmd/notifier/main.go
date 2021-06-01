@@ -8,7 +8,6 @@ import (
 	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/adding"
 	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/cli"
 	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/email"
-	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/fetching"
 	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/listing"
 	"github.com/ashkanjj/go-websiteChangeNotifier/pkg/storage/bolt"
 )
@@ -39,13 +38,12 @@ func main() {
 	}
 
 	adder := adding.NewService(storage)
-	fetcher := fetching.NewService(*url)
 	lister := listing.NewService(storage)
 	emailSender, err := email.NewService(*emailConfigFile)
 
 	if err != nil {
 		log.Fatal("error in email config", err)
 	}
-	cli.Process(adder, fetcher, lister, emailSender, *url, time.Second*5, false)
+	cli.Process(adder, lister, emailSender, *url, time.Second*5, false)
 
 }

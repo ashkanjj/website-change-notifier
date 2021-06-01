@@ -1,13 +1,13 @@
 import useFetch from "./useFetch";
 import { Snapshot } from "../types";
 
-function useSnapshots(website: string) {
-  const { data, isLoading, isError } = useFetch<Snapshot>(
-    website && `/api/snapshots?websiteId=${website}`
+function useSnapshots(websiteId: string) {
+const { data, isLoading, isError } = useFetch<Snapshot>(
+    websiteId && `/api/snapshots?websiteId=${websiteId}`
   );
 
   return {
-    snapshots: data || [],
+    data: data || [],
     isLoading,
     isError,
   };

@@ -19,7 +19,7 @@ interface SelectedItem {
 }
 
 export const WebsiteSnapshots = (props: {}) => {
-  const { isLoading: websiteLoading, websites } = useWebsites();
+  const { isLoading: websiteLoading, data } = useWebsites();
   const [selectedItem, setSelectedItem] = useState<MatrixItem>();
   const { snapshots, isLoading: snapshotLoading, isError } = useSnapshots(
     selectedItem && selectedItem.type === "website" && selectedItem.id
@@ -27,16 +27,16 @@ export const WebsiteSnapshots = (props: {}) => {
 
   useEffect(() => {
     // only initially set the first loaded website
-    if (!selectedItem && websites.length) {
-      setSelectedItem({ id: websites[0].id, type: "website" });
+    if (!selectedItem && data.length) {
+      setSelectedItem({ id: data[0].id, type: "website" });
     }
-  }, [selectedItem, websites]);
+  }, [selectedItem, data]);
 
   const matrix = useMemo(() => {
-    const wids = websites.map((d) => ({ id: d.id, type: "website" }));
+    const wids = data.map((d) => ({ id: d.id, type: "website" }));
     const sids = snapshots.map((d) => ({ id: d.id, type: "snapshot" }));
     return new OnScreenMatrix(wids, sids);
-  }, [websites, snapshots]);
+  }, [data, snapshots]);
 
   function handleOnKeyPress(e: KeyboardEvent) {
     const direction = directionBasedOnKeyCode(e.keyCode);
@@ -57,7 +57,7 @@ export const WebsiteSnapshots = (props: {}) => {
       <Cols>
         <Col>
           <SecondaryHeading>Website list</SecondaryHeading>
-          {websites.map((website, i) => (
+          {data.map((website, i) => (
             <MatrixParagraph
               selected={selectedItem?.id === website.id}
               onClick={() => {

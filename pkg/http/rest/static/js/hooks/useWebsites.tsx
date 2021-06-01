@@ -7,7 +7,7 @@ function useWebsites() {
   return {
     isError,
     isLoading,
-    websites: data,
+    data,
   };
 }
 
