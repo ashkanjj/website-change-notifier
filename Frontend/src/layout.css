@@ -1,0 +1,30 @@
+.wrapper {
+  display: grid;
+  grid-template-rows: 3rem auto;
+  grid-template-areas: "header header" "menu content";
+  height: 100vh;
+}
+.header {
+  grid-area: header;
+}
+
+.menu {
+  grid-area: menu;
+}
+
+.content {
+  grid-area: content;
+}
+
+@media only screen and (min-width: 480px) {
+  .wrapper {
+    grid-template-columns: 7rem auto;
+  }
+}
+
+/* Desktop */
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    grid-template-columns: 14rem auto;
+  }
+}
