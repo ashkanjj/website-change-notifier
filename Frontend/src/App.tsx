@@ -8,7 +8,7 @@ function App() {
         <div>WebsiteChangeNotifier</div>
         <IconText className="mr-4 hover:text-blue-100" text="Logout" />
       </div>
-      <div className="menu bg-blue-900 h-full">
+      <div className="menu bg-blue-900 h-full transition-all duration-300">
         <ul className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow text-white">
           <li className="px-5">
             <div className="text-sm font-light tracking-wide text-gray-400 uppercase">
@@ -20,7 +20,7 @@ function App() {
           </li>
         </ul>
       </div>
-      <div className="content">content</div>
+      <div className="content p-4 transition-all duration-300">content</div>
     </div>
   );
 }
