@@ -1,17 +1,20 @@
 import React, { ReactHTML } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-interface IProps {
-  className?: string;
-  icon?: string;
+export interface IconTextProps {
+  wrapperClassName?: string;
+  textClassName?: string;
+  faIcon?: IconDefinition;
   text: string;
   link?: string;
   wrapperEl?: keyof ReactHTML;
 }
 
-function IconText(props: IProps) {
-  const { icon = "(icon)", link, text, wrapperEl } = props;
+function IconText(props: IconTextProps) {
+  const { faIcon, link, text, textClassName, wrapperEl } = props;
   const wrapperProps = {
-    className: `relative flex flex-row items-center h-11 pr-6 ${props.className}`,
+    className: `relative flex flex-row items-center h-11 pr-6 ${props.wrapperClassName}`,
   };
   let Wrapper;
   if (!wrapperEl) {
@@ -31,9 +34,11 @@ function IconText(props: IProps) {
   return (
     <Wrapper>
       <span className="inline-flex justify-center items-center ml-4">
-        {icon}
+        {!faIcon ? "(icon)" : <FontAwesomeIcon icon={faIcon} />}
       </span>
-      <span className="ml-2 text-sm tracking-wide truncate">{text}</span>
+      <span className={`ml-2 text-sm tracking-wide truncate ${textClassName}`}>
+        {text}
+      </span>
     </Wrapper>
   );
 }
