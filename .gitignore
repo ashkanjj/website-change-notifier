@@ -3,3 +3,16 @@ node_modules
 dist
 
 yarn-error.log
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+**/.aws-sam/*

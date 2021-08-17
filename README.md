@@ -20,7 +20,7 @@ Pages:
 
 ## Lambdas
 
-- POST /register -d {url: string}
+- Watcher POST /register -d {url: string}
 -
 - Exclude chunk from URL
 -
@@ -88,10 +88,60 @@ By Daemon:
 
 WatchedUrl {
 userId: string (primaryKey)
-sk: string (one of the folowing patterns) - URL#http:/... - snapshot#http://google.com#2021-02-09-16:26 - exclusion#http://google.com#2021-02-09-16:26
+sk: string (one of the folowing patterns)
+- URL#http:/...
+- snapshot#http://google.com#2021-02-09-16:26
+- exclusion#http://google.com#2021-02-09-16:26
 url: string;
 createdDateTime: datetime;
 state: "open" | "closed"
 snapshot?: string;
 exclusion?: string
 }
+
+### API routes (defined on API Gateway)
+
+URLs
+
+- POST /watcher/:userId
+  Add new URL for user
+
+  {
+    url: string;
+  }
+
+- GET /watcher
+  Get all registered URLs
+
+- GET /watcher/:userId
+  Get all URLs for a user
+
+Snapshots
+
+- GET /watcher/:userId/snapshots
+  {
+    url: string
+  }
+  Get all snapshots for a user and URL
+
+- POST /watcher/:userId/snapshots
+  Add new snapshot for a user and a URL
+  {
+    url: string;
+    content: string;
+  }
+
+Exclusions
+
+- POST /watcher/:userId/exclusions
+  Post new exclusion for a user
+  {
+    url: string
+    content: string
+  }
+
+- GET /watcher/:userId/exclusions
+  Get all exclusions by userId and URL
+  {
+    url: string
+  }
