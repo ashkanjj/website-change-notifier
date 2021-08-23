@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "get-watcher using sam to test"
+
+Globals:
+  Function:
+    Timeout: 3
+Resources:
+  GetWatcherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: main.handler
+      Runtime: nodejs12.x
+      Events:
+        GetAllWatcher:
+          Type: Api
+          Properties:
+            Path: /get
+            Method: get
+        GetWatcher:
+          Type: Api
+          Properties:
+            Path: /get/{user}
+            Method: get
