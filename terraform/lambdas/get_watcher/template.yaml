@@ -13,11 +13,6 @@ Resources:
       Handler: main.handler
       Runtime: nodejs12.x
       Events:
-        GetAllWatcher:
-          Type: Api
-          Properties:
-            Path: /get
-            Method: get
         GetWatcher:
           Type: Api
           Properties:

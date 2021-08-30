@@ -27,7 +27,7 @@ resource "aws_lambda_function" "register_watcher" {
   s3_bucket = aws_s3_bucket.register_watcher_lambda_bucket.id
   s3_key    = aws_s3_bucket_object.register_watcher_lambda_bucket_object.key
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   handler = "main.handler"
 
   source_code_hash = data.archive_file.register_watcher_archive_file.output_base64sha256
@@ -84,7 +84,7 @@ resource "aws_iam_role_policy" "dynamodbRegisterUrlWriteAccess" {
 }
 
 resource "aws_apigatewayv2_api" "register_watcher_lambda" {
-  name          = "serverless_lambda_gw"
+  name          = "serverless_lambda_gw_post_watcher"
   protocol_type = "HTTP"
 }
 

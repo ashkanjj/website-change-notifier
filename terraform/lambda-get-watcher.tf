@@ -27,15 +27,13 @@ resource "aws_lambda_function" "get_watcher" {
   s3_bucket = aws_s3_bucket.get_watcher_lambda_bucket.id
   s3_key    = aws_s3_bucket_object.get_watcher_lambda_bucket_object.key
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   handler = "main.handler"
 
   source_code_hash = data.archive_file.get_watcher_archive_file.output_base64sha256
 
   role = aws_iam_role.get_watcher_lambda_exec.arn
 }
-
-
 
 
 resource "aws_cloudwatch_log_group" "get_watcher" {
@@ -89,7 +87,7 @@ resource "aws_iam_role_policy" "dynamodbWatchedUrlWriteAccess" {
 }
 
 resource "aws_apigatewayv2_api" "get_watcher_lambda" {
-  name          = "serverless_lambda_gw"
+  name          = "serverless_lambda_gw_get_watcher"
   protocol_type = "HTTP"
 }
 
@@ -129,7 +127,7 @@ resource "aws_apigatewayv2_integration" "get_watcher" {
 resource "aws_apigatewayv2_route" "get_watcher" {
   api_id = aws_apigatewayv2_api.get_watcher_lambda.id
 
-  route_key = "POST /watcher"
+  route_key = "GET /watcher"
   target    = "integrations/${aws_apigatewayv2_integration.get_watcher.id}"
 }
 

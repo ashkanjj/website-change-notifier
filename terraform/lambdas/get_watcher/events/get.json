@@ -10,9 +10,7 @@
   "multiValueQueryStringParameters": {
     "foo": ["bar"]
   },
-  "pathParameters": {
-    "proxy": "/get"
-  },
+  "pathParameters": { "user": 3 },
   "stageVariables": {
     "baz": "qux"
   },
