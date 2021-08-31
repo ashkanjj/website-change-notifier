@@ -16,14 +16,14 @@ Should also have a UI where you can exclude certian text (HTML) chunks from bein
 Pages:
 
 - Watched URLs
+  - Excluder
 - (if no watched URLs) A simple Button to say Watch a new URL and a form to register the URL
 
 ## Lambdas
 
 - Watcher POST /register -d {url: string}
--
+- Register
 - Exclude chunk from URL
--
 
 ## Data model
 
@@ -89,15 +89,16 @@ By Daemon:
 WatchedUrl {
 userId: string (primaryKey)
 sk: string (one of the folowing patterns)
+
 - URL#http:/...
 - snapshot#http://google.com#2021-02-09-16:26
 - exclusion#http://google.com#2021-02-09-16:26
-url: string;
-createdDateTime: datetime;
-state: "open" | "closed"
-snapshot?: string;
-exclusion?: string
-}
+  url: string;
+  createdDateTime: datetime;
+  state: "open" | "closed"
+  snapshot?: string;
+  exclusion?: string
+  }
 
 ### API routes (defined on API Gateway)
 
@@ -107,7 +108,7 @@ URLs
   Add new URL for user
 
   {
-    url: string;
+  url: string;
   }
 
 - GET /watcher
@@ -120,15 +121,15 @@ Snapshots
 
 - GET /watcher/:userId/snapshots
   {
-    url: string
+  url: string
   }
   Get all snapshots for a user and URL
 
 - POST /watcher/:userId/snapshots
   Add new snapshot for a user and a URL
   {
-    url: string;
-    content: string;
+  url: string;
+  content: string;
   }
 
 Exclusions
@@ -136,12 +137,12 @@ Exclusions
 - POST /watcher/:userId/exclusions
   Post new exclusion for a user
   {
-    url: string
-    content: string
+  url: string
+  content: string
   }
 
 - GET /watcher/:userId/exclusions
   Get all exclusions by userId and URL
   {
-    url: string
+  url: string
   }

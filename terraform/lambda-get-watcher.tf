@@ -89,12 +89,17 @@ resource "aws_iam_role_policy" "dynamodbWatchedUrlWriteAccess" {
 resource "aws_apigatewayv2_api" "get_watcher_lambda" {
   name          = "serverless_lambda_gw_get_watcher"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_methods = ["OPTIONS","POST"]
+    allow_origins = ["*"]
+    allow_headers = ["Content-Type"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "get_watcher_lambda" {
   api_id = aws_apigatewayv2_api.get_watcher_lambda.id
 
-  name        = "serverless_lambda_stage"
+  name        = "$default"
   auto_deploy = true
 
   access_log_settings {
@@ -130,6 +135,14 @@ resource "aws_apigatewayv2_route" "get_watcher" {
   route_key = "GET /watcher"
   target    = "integrations/${aws_apigatewayv2_integration.get_watcher.id}"
 }
+
+resource "aws_apigatewayv2_route" "get_watcher_user" {
+  api_id = aws_apigatewayv2_api.get_watcher_lambda.id
+
+  route_key = "GET /watcher/{user}"
+  target    = "integrations/${aws_apigatewayv2_integration.get_watcher.id}"
+}
+
 
 resource "aws_cloudwatch_log_group" "get_watcher_apigw" {
   name = "/aws/api_get_watcher_gw/${aws_apigatewayv2_api.get_watcher_lambda.name}"

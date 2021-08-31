@@ -86,12 +86,17 @@ resource "aws_iam_role_policy" "dynamodbRegisterUrlWriteAccess" {
 resource "aws_apigatewayv2_api" "register_watcher_lambda" {
   name          = "serverless_lambda_gw_post_watcher"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_methods = ["OPTIONS","POST"]
+    allow_origins = ["*"]
+    allow_headers = ["Content-Type"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "register_watcher_lambda" {
   api_id = aws_apigatewayv2_api.register_watcher_lambda.id
 
-  name        = "serverless_lambda_stage"
+  name        = "$default"
   auto_deploy = true
 
   access_log_settings {

@@ -10,7 +10,7 @@
   "multiValueQueryStringParameters": {
     "foo": ["bar"]
   },
-  "pathParameters": { "user": 3 },
+  "pathParameters": { "user": "3" },
   "stageVariables": {
     "baz": "qux"
   },
