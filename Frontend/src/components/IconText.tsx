@@ -9,10 +9,18 @@ export interface IconTextProps {
   text: string;
   link?: string;
   wrapperEl?: keyof ReactHTML;
+  textSize?: "xs" | "sm";
 }
 
 function IconText(props: IconTextProps) {
-  const { faIcon, link, text, textClassName, wrapperEl } = props;
+  const {
+    faIcon,
+    link,
+    text,
+    textClassName,
+    textSize = "sm",
+    wrapperEl,
+  } = props;
   const wrapperProps = {
     className: `relative flex flex-row items-center h-11 pr-6 ${props.wrapperClassName}`,
   };
@@ -36,7 +44,9 @@ function IconText(props: IconTextProps) {
       <span className="inline-flex justify-center items-center ml-4">
         {!faIcon ? "(icon)" : <FontAwesomeIcon icon={faIcon} />}
       </span>
-      <span className={`ml-2 text-sm tracking-wide truncate ${textClassName}`}>
+      <span
+        className={`ml-2 text-${textSize} tracking-wide truncate ${textClassName}`}
+      >
         {text}
       </span>
     </Wrapper>

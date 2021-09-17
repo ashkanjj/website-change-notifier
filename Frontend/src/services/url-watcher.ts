@@ -1,8 +1,8 @@
 import axios from "axios";
-import { DynamoDBResponse, User, WatchedUrlTable } from "../types";
+import { DynamoDBResponse, User, WatchedUrlDynamoTable } from "../types";
 
 function getURLs(user?: number) {
-  return axios.get<DynamoDBResponse<WatchedUrlTable>>(
+  return axios.get<DynamoDBResponse<WatchedUrlDynamoTable>>(
     `https://ovxhaf8vq3.execute-api.eu-west-2.amazonaws.com/watcher${
       user ? `/${user}` : ""
     }`

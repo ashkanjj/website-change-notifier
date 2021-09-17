@@ -1,25 +1,24 @@
 import { faList, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
-import React, { useCallback, useContext, useState } from "react";
-import ReactLoading from "react-loading";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import BurgerMenu from "./BurgerMenu";
 import IconText, { IconTextProps } from "./components/IconText";
-import useAPICall from "./hooks/fetch";
-import { getURLs } from "./services/url-watcher";
-import { DynamoDBResponse, User, WatchedUrlTable } from "./types";
-import { UserContext } from "./UserProvider";
-
-const menuWidth = {
-  smDevices: 16,
-  mdDevices: 56,
-};
+import config from "./config";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <div className="wrapper grid grid-rows-layout grid-flow-col h-screen z-index: 0;    ">
-      <Header />
-      <SideMenu />
-      <Content />
-    </div>
+    <Router>
+      <div className="wrapper grid grid-rows-layout grid-flow-col h-screen z-index: 0;    ">
+        <Header />
+        <SideMenu />
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
@@ -56,8 +55,8 @@ function Header() {
 function SideMenu() {
   const [open, setOpen] = useState(false);
   const wrapperWidth = `w-${
-    open ? menuWidth.mdDevices : menuWidth.smDevices
-  } md:w-${menuWidth.mdDevices}`; // by default small devices width OR medium devices if moused over AND medium devices width when on medium width
+    open ? config.menuWidth.mdDevices : config.menuWidth.smDevices
+  } md:w-${config.menuWidth.mdDevices}`; // by default small devices width OR medium devices if moused over AND medium devices width when on medium width
   return (
     <div
       className={`fixed ${wrapperWidth} z-20 bg-blue-900 h-full transition-all duration-300 pt-14`}
@@ -86,64 +85,4 @@ function SideMenu() {
     </div>
   );
 }
-
-function URLListContainer({ items }: { items: WatchedUrlTable[] }) {
-  return (
-    <div>
-      <p>Registered URLs</p>
-      {items.map((item) => (
-        <div key={item.sk}>{item.sk}</div>
-      ))}
-    </div>
-  );
-}
-
-function CreateNewURLCTA() {
-  return (
-    <div>
-      <p>You have no registered URLs!</p>
-      <button>Create new URL</button>
-    </div>
-  );
-}
-
-function Content() {
-  const user = useContext(UserContext);
-  const getUserURLs = useCallback(() => getURLs(3), [getURLs]);
-  const { response, error, loading } =
-    useAPICall<DynamoDBResponse<WatchedUrlTable>>(getUserURLs);
-
-  const items = response?.data?.Items || [];
-
-  const userHasURLs = items.length > 0;
-
-  return (
-    <div
-      className={`col-start-1 col-span-2 row-start-2 row-span-1 z-10 p-4 ml-${menuWidth.smDevices} md:ml-${menuWidth.mdDevices} transition-all duration-300`}
-    >
-      <h1 className="text-2xl">Welcome {user?.name}</h1>
-      <div className="mt-4">
-        {loading ? (
-          <ReactLoading
-            type={"spin"}
-            color="#1e3a8a"
-            height="50px"
-            width="50px"
-          />
-        ) : error ? (
-          <p>{error}</p>
-        ) : (
-          <>
-            {userHasURLs ? (
-              <>{items.length && <URLListContainer items={items} />}</>
-            ) : (
-              <CreateNewURLCTA />
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default App;

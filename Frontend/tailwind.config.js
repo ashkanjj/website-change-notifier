@@ -9,11 +9,17 @@ module.exports = {
       transformOrigin: {
         1: "1px",
       },
+      colors: {
+        "cornflower-blue": "#6195ED",
+        geyser: "#dce0e6",
+      },
     },
   },
   variants: {
     extend: {
+      cursor: ["hover"],
       width: ["hover"],
+      borderColor: ["hover"],
     },
   },
   plugins: [],

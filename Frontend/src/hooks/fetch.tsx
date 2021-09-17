@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 function useAPICall<T>(apiFunction: () => Promise<AxiosResponse<T>>) {
   const [response, setResponse] = useState<AxiosResponse<T> | null>(null);
+  const [originalResponse, setOriginalResponse] =
+    useState<AxiosResponse<T> | null>(null);
   const [error, setError] = useState("");
   const [loading, setloading] = useState(true);
 
@@ -10,6 +12,7 @@ function useAPICall<T>(apiFunction: () => Promise<AxiosResponse<T>>) {
     apiFunction()
       .then((res) => {
         setResponse(res);
+        setOriginalResponse(res);
       })
       .catch((err) => {
         setError(err);
@@ -19,7 +22,7 @@ function useAPICall<T>(apiFunction: () => Promise<AxiosResponse<T>>) {
       });
   }, [apiFunction]);
 
-  return { response, error, loading };
+  return { response, originalResponse, error, loading };
 }
 
 export default useAPICall;
