@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import BurgerMenu from "./BurgerMenu";
 import IconText, { IconTextProps } from "./components/IconText";
 import config from "./config";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (
@@ -13,6 +13,9 @@ function App() {
         <Header />
         <SideMenu />
         <Switch>
+          <Route path="/new-url-watcher">
+            <p>New URL Watcher form here</p>
+          </Route>
           <Route path="/">
             <Home />
           </Route>

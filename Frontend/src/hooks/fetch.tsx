@@ -1,7 +1,16 @@
 import { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 
-function useAPICall<T>(apiFunction: () => Promise<AxiosResponse<T>>) {
+export interface UseAPICallResponse<T> {
+  response: AxiosResponse<T> | null;
+  originalResponse: AxiosResponse<T> | null;
+  error: string;
+  loading: boolean;
+}
+
+function useAPICall<T>(
+  apiFunction: () => Promise<AxiosResponse<T>>
+): UseAPICallResponse<T> {
   const [response, setResponse] = useState<AxiosResponse<T> | null>(null);
   const [originalResponse, setOriginalResponse] =
     useState<AxiosResponse<T> | null>(null);
