@@ -21,7 +21,8 @@ module.exports = {
   },
   devtool: isDev && "inline-source-map",
   devServer: {
-    contentBase: "./dist",
+    // contentBase: "./dist",
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

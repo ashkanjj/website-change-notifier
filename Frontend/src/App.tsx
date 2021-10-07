@@ -5,6 +5,7 @@ import BurgerMenu from "./BurgerMenu";
 import IconText, { IconTextProps } from "./components/IconText";
 import config from "./config";
 import Home from "./pages/Home/Home";
+import NewURL from "./pages/NewURL/NewURL";
 
 function App() {
   return (
@@ -12,14 +13,19 @@ function App() {
       <div className="wrapper grid grid-rows-layout grid-flow-col h-screen z-index: 0;    ">
         <Header />
         <SideMenu />
-        <Switch>
-          <Route path="/new-url-watcher">
-            <p>New URL Watcher form here</p>
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <div
+          style={{ backgroundColor: "#f7f8fa" }}
+          className={`col-start-1 col-span-2 row-start-2 row-span-1 z-10 p-4 ml-${config.menuWidth.smDevices} md:ml-${config.menuWidth.mdDevices} transition-all duration-300 overflow-auto`}
+        >
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/new-url-watcher">
+              <NewURL />
+            </Route>
+          </Switch>
+        </div>
       </div>
     </Router>
   );
@@ -44,7 +50,9 @@ function SideMenuIconText(props: {
 function Header() {
   return (
     <div className="col-start-1 col-span-2 row-start-1 row-span-1 flex flex-row items-center justify-between z-30 pl-5 bg-blue-800 text-white">
-      <div>WebsiteChangeNotifier</div>
+      <div>
+        <Link to="/">WebsiteChangeNotifier</Link>
+      </div>
       <IconText
         wrapperClassName="mr-4 hover:text-blue-100"
         faIcon={faDoorOpen}

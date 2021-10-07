@@ -1,42 +1,39 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
+import ReactLoading from "react-loading";
+import useSWR from "swr";
 
-import config from "../../config";
-import useAPICall from "../../hooks/fetch";
 import { getURLs } from "../../services/url-watcher";
-import { DynamoDBResponse, WatchedUrlDynamoTable } from "../../types";
 import { UserContext } from "../../UserProvider";
 import CreateNewURLCTA from "./CreateNewCTA";
 import URLList from "./URLList";
 
 function Home() {
   const user = useContext(UserContext);
-  const getUserURLs = useCallback(() => getURLs(4), [getURLs]);
 
-  const { response, originalResponse, error, loading } =
-    useAPICall<DynamoDBResponse<WatchedUrlDynamoTable>>(getUserURLs);
+  const { data, error } = useSWR("get_url", getURLs);
 
-  const shouldShowCreateNewURLCTA =
-    !loading && !error && response?.data?.Items.length === 0;
+  const isLoading = !data && !error;
+  const shouldShowCreateNewURLCTA = !isLoading && !error && data?.length === 0;
 
-  return (
-    <div
-      style={{ backgroundColor: "#f7f8fa" }}
-      className={`col-start-1 col-span-2 row-start-2 row-span-1 z-10 p-4 ml-${config.menuWidth.smDevices} md:ml-${config.menuWidth.mdDevices} transition-all duration-300 overflow-auto`}
-    >
-      <h1 className="text-2xl mb-6">Welcome {user?.name}</h1>
-
-      {shouldShowCreateNewURLCTA ? (
-        <CreateNewURLCTA />
-      ) : (
-        <URLList
-          originalResponse={originalResponse}
-          response={response}
-          error={error}
-          loading={loading}
-        />
-      )}
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <ReactLoading type={"spin"} color="#1e3a8a" height="50px" width="50px" />
+    );
+  } else if (error) {
+    return <p>{error}</p>;
+  } else {
+    return (
+      <>
+        <h1 className="text-2xl mb-6">Welcome {user?.name}</h1>
+        {shouldShowCreateNewURLCTA ? (
+          <CreateNewURLCTA />
+        ) : (
+          <URLList data={data} />
+        )}
+        `
+      </>
+    );
+  }
 }
 
 export default Home;
