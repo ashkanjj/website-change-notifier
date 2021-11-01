@@ -9,7 +9,6 @@ export default (props: { data: WatchedUrl[] | undefined }) => {
 
   return (
     <div className="mt-4">
-      <h3 className="mb-4">Below you can find a list of your watched URLs</h3>
 
       <VStack spacing="24px">
         {data &&

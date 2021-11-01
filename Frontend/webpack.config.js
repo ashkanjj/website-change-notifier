@@ -21,7 +21,7 @@ module.exports = {
   },
   devtool: isDev && "inline-source-map",
   devServer: {
-    // contentBase: "./dist",
+    contentBase: "./dist",
     historyApiFallback: true,
   },
   plugins: [
@@ -36,5 +36,6 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
+    publicPath: "/",
   },
 };

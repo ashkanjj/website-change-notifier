@@ -11,7 +11,9 @@ async function getURLs(user?: number) {
   return transformDynamoToWatchedURL(results);
 }
 
-function registerNewURL({ url }: { url: string }) {
+function registerNewURL(params: { url: string }) {
+  const { url } = params;
+  console.log("register new URL", url);
   return axios.post(
     `https://25xyxzbcb7.execute-api.eu-west-2.amazonaws.com/watcher`,
     {

@@ -1,8 +1,9 @@
 import React from "react";
 
 interface ButtonProps {
+  className?: string;
   children: React.ReactNode;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => void;
   type?: "primary" | "secondary";
   submitBtn?: boolean;
@@ -19,7 +20,9 @@ const Button = React.forwardRef((props: ButtonProps, ref) => {
   } = props;
   const classes =
     type === "primary"
-      ? "border border-solid border-gray-700 uppercase transition-all rounded-sm bg-blue-800 hover:bg-blue-900 text-white p-4 h-10 inline-flex items-center disabled:opacity-5"
+      ? `border border-solid border-gray-700 uppercase transition-all rounded-sm bg-blue-800 hover:bg-blue-900 text-white p-4 h-10 inline-flex items-center disabled:opacity-5 ${
+          props.className || ""
+        }`
       : "";
   return (
     <button

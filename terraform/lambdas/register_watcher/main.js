@@ -18,8 +18,9 @@ const handler = async (event) => {
             statusCode: 400,
         };
     }
+    const currentDate = new Date().toISOString();
     return new Promise((res, rej) => {
-        registerURL(3, requestBody.url)
+        registerURL(3, requestBody.url, currentDate)
             .then(() => {
             res({
                 statusCode: 200,
@@ -40,13 +41,14 @@ const handler = async (event) => {
     });
 };
 exports.handler = handler;
-function registerURL(userId, url) {
+function registerURL(userId, url, createdOn) {
     return ddb
         .put({
         TableName: "watched-url",
         Item: {
             userId,
             sk: "URL#" + url,
+            createdOn,
         },
     })
         .promise();

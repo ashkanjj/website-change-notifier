@@ -21,9 +21,7 @@ function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/new-url-watcher">
-              <NewURL />
-            </Route>
+            <Route path="/new-url-watcher" component={NewURL} />
           </Switch>
         </div>
       </div>

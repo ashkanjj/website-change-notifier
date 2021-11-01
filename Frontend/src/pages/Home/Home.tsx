@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import ReactLoading from "react-loading";
+import { Link } from "react-router-dom";
 import useSWR from "swr";
+import Button from "../../components/Button";
 
 import { getURLs } from "../../services/url-watcher";
 import { UserContext } from "../../UserProvider";
@@ -10,10 +12,10 @@ import URLList from "./URLList";
 function Home() {
   const user = useContext(UserContext);
 
-  const { data, error } = useSWR("get_url", getURLs);
+  const { data, error } = useSWR("4", getURLs);
 
   const isLoading = !data && !error;
-  const shouldShowCreateNewURLCTA = !isLoading && !error && data?.length === 0;
+  const shouldShowURLList = !isLoading && !error && !!data?.length;
 
   if (isLoading) {
     return (
@@ -25,12 +27,20 @@ function Home() {
     return (
       <>
         <h1 className="text-2xl mb-6">Welcome {user?.name}</h1>
-        {shouldShowCreateNewURLCTA ? (
-          <CreateNewURLCTA />
-        ) : (
-          <URLList data={data} />
-        )}
-        `
+
+        <div className="flex justify-between">
+          <h3 className="mb-4">
+            {shouldShowURLList ? (
+              <>Below you can find a list of your watched URLs</>
+            ) : (
+              <>You have no registered URLs, you can create some &#128073;</>
+            )}
+          </h3>
+          <Link to={"/new-url-watcher"} component={Button}>
+            Add new URL
+          </Link>
+        </div>
+        {shouldShowURLList && <URLList data={data} />}
       </>
     );
   }

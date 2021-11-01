@@ -1,5 +1,5 @@
 {
-  "body": "{\"key\": \"xuNPkEn+SutkciDSZfsmedU2GQ2t1WqfBIFBhtVD\", \"url\": \"http://first-test.com\"}",
+  "body": "{\"key\": \"xuNPkEn+SutkciDSZfsmedU2GQ2t1WqfBIFBhtVD\", \"url\": \"http://testing-date.com\"}",
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
   "httpMethod": "POST",

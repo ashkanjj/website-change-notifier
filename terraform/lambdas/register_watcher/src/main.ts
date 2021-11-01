@@ -22,8 +22,12 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     };
   }
 
+
+
+  const currentDate = new Date().toISOString();
+
   return new Promise((res, rej) => {
-    registerURL(3, requestBody.url)
+    registerURL(3, requestBody.url, currentDate)
       .then(() => {
         res({
           statusCode: 200,
@@ -44,13 +48,16 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   });
 };
 
-function registerURL(userId: number, url: string) {
+
+
+function registerURL(userId: number, url: string, createdOn: string) {
   return ddb
     .put({
       TableName: "watched-url",
       Item: {
         userId,
         sk: "URL#" + url,
+        createdOn,
       },
     })
     .promise();
