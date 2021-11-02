@@ -24,7 +24,9 @@
     "registry": "https://npm.pkg.github.com"
   },
   "repository": {
-    "url": "git://github.com/ashkanjj/website-change-notifier.git"
+    "url": "git@github.com:ashkanjj/website-change-notifier.git",
+    "type": "git",
+    "directory": "terraform/libs/watcher-service"
   },
   "husky": {
     "hooks": {
@@ -37,7 +39,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "watcher-service",
+  "name": "@ashkanjj/watcher-service",
   "author": "Ash Shahabi",
   "module": "dist/watcher-service.esm.js",
   "size-limit": [
