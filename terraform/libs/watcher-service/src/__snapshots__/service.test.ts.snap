@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`service getURLs it should return the list of URLs 1`] = `
+Array [
+  Object {
+    "sk": "URL#http://google.com",
+    "userId": 141,
+  },
+  Object {
+    "sk": "URL#http://hotmail.com",
+    "userId": 141,
+  },
+]
+`;
