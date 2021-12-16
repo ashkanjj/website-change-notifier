@@ -10,9 +10,6 @@ import NewURLSuccess from "./NewURLSuccess";
 
 export default function NewURLIndex(props: RouteComponentProps) {
   let { path, url } = useRouteMatch();
-  setTimeout(() => {
-    console.log("all good");
-  }, 4000);
   return (
     <Switch>
       <Route path={`${path}/success`}>

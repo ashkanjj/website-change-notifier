@@ -4,14 +4,17 @@
   "description": "Get watcher Lambda function",
   "main": "main.js",
   "scripts": {
-    "compile": "tsc"
+    "build": "esbuild src/main.ts --bundle --external:aws-sdk --platform=node --outfile=dist/main.js",
+    "types:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.83",
     "@types/node": "^16.7.13",
+    "esbuild": "^0.13.13",
     "typescript": "^4.4.2"
   },
   "dependencies": {
+    "@ashkanjj/watcher-service": "^0.1.3",
     "aws-sdk": "^2.984.0"
   },
   "author": "Ash Shahabi",

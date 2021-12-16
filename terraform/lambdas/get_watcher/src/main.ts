@@ -1,3 +1,4 @@
+import { getURLs } from "@ashkanjj/watcher-service";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import * as AWS from "aws-sdk";
 
@@ -36,22 +37,3 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     });
   }
 };
-
-function getURLs(user?: number) {
-  const query = user
-    ? ddb
-        .query({
-          TableName: "watched-url",
-          KeyConditionExpression: "userId = :hkey",
-          ExpressionAttributeValues: {
-            ":hkey": user,
-          },
-        })
-        .promise()
-    : ddb
-        .scan({
-          TableName: "watched-url",
-        })
-        .promise();
-  return query;
-}

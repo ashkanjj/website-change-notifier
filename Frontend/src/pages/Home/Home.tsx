@@ -6,13 +6,12 @@ import Button from "../../components/Button";
 
 import { getURLs } from "../../services/url-watcher";
 import { UserContext } from "../../UserProvider";
-import CreateNewURLCTA from "./CreateNewCTA";
 import URLList from "./URLList";
 
 function Home() {
   const user = useContext(UserContext);
 
-  const { data, error } = useSWR("4", getURLs);
+  const { data, error } = useSWR("3", getURLs);
 
   const isLoading = !data && !error;
   const shouldShowURLList = !isLoading && !error && !!data?.length;

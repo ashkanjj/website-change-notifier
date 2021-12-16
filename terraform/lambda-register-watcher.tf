@@ -7,8 +7,8 @@ resource "aws_s3_bucket" "register_watcher_lambda_bucket" {
 
 data "archive_file" "register_watcher_archive_file" {
   type = "zip"
-
-  source_dir  = "${path.module}/lambdas/register_watcher"
+  
+  source_dir  = "${path.module}/lambdas/register_watcher/dist"
   output_path = "${path.module}/register_watcher.zip"
 }
 
@@ -75,6 +75,8 @@ resource "aws_iam_role_policy" "dynamodbRegisterUrlWriteAccess" {
       {
         Action = [
           "dynamodb:PutItem",
+          "dynamodb:Get*",
+          "dynamodb:Query",
         ]
         Effect   = "Allow"
         Resource = "arn:aws:dynamodb:eu-west-2:476368154329:table/watched-url"

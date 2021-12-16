@@ -1,3 +1,4 @@
+import { getURL, registerURL } from "@ashkanjj/watcher-service";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import * as AWS from "aws-sdk";
 
@@ -8,6 +9,8 @@ export const handler = async (event: APIGatewayProxyEvent) => {
   let responseMessage = "URL successfully registered";
 
   const requestBody: { key: string; url: string } = JSON.parse(event.body);
+
+  const userId = 3; // hardcoded for now
 
   if (requestBody.key !== "xuNPkEn+SutkciDSZfsmedU2GQ2t1WqfBIFBhtVD") {
     return {
@@ -22,7 +25,15 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     };
   }
 
+  const matchingURL = await getURL(userId, requestBody.url);
 
+  if (matchingURL.Items && matchingURL.Items.length) {
+    // URL already exists
+    return {
+      error: "URL is already registered ",
+      statusCode: 409,
+    };
+  }
 
   const currentDate = new Date().toISOString();
 
@@ -47,18 +58,3 @@ export const handler = async (event: APIGatewayProxyEvent) => {
       });
   });
 };
-
-
-
-function registerURL(userId: number, url: string, createdOn: string) {
-  return ddb
-    .put({
-      TableName: "watched-url",
-      Item: {
-        userId,
-        sk: "URL#" + url,
-        createdOn,
-      },
-    })
-    .promise();
-}

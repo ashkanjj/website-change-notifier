@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "get_watcher_lambda_bucket" {
 data "archive_file" "get_watcher_archive_file" {
   type = "zip"
 
-  source_dir  = "${path.module}/lambdas/get_watcher"
+  source_dir  = "${path.module}/lambdas/get_watcher/dist"
   output_path = "${path.module}/get_watcher.zip"
 }
 

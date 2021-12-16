@@ -12,7 +12,7 @@ export default function BurgerMenu(props: {
   return (
     <button
       onClick={() => onOpen(!open)}
-      className={`relative flex flex-col ml-5 justify-around w-6 h-6 bg-transparent border-none cursor-pointer p-0 z-10 focus:outline-none group ${className}`}
+      className={`relative flex flex-col ml-5 justify-around ho-6 h-6 bg-transparent border-none cursor-pointer p-0 z-10 focus:outline-none group ${className}`}
     >
       <div
         className={`${divClassesCommon} transform ${
