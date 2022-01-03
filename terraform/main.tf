@@ -32,6 +32,20 @@ resource "aws_dynamodb_table" "watched-urls-dynamodb-table" {
     type = "S"
   }
 
+  attribute {
+    name = "type"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name               = "GetAllIndex"
+    hash_key           = "type"
+    range_key          = "sk"
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["createdOn"]
+  }
+
+
   tags = {
     Name        = "main-dynamodb-table"
     Environment = "prod"

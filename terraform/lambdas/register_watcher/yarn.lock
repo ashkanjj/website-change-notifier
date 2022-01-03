@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ashkanjj/watcher-service@^0.1.5":
-  version "0.1.5"
-  resolved "https://npm.pkg.github.com/download/@ashkanjj/watcher-service/0.1.5/6626d5a25639ce402e6f5c705352542fbdaf093ac14ae71770a86d0ffcdaa0ad#168d2801b0ea576592e2f4ea76aec36b4e34eda3"
-  integrity sha512-4CYLoihlocthHGebpHGtMPLi1ogEms5eYjBBQRsv2jeZyJgNlx9SHLM+QOSyHBnjfGVNvhqtIXYyKr/QDctMlA==
+"@ashkanjj/watcher-service@^0.1.6":
+  version "0.1.6"
+  resolved "https://npm.pkg.github.com/download/@ashkanjj/watcher-service/0.1.6/ca5bda794d2214ca64991b3643db2d909404857724cd6ad4bc5d1b0881d4f37c#ee52f9df1def24afc7aa60ca71a50dff865bb10c"
+  integrity sha512-TcKTqPUqPlc6gcQnCW+FfKDT77mbkQtxLTbLVRNCy+zxjqwk5kmCJyvY6G1nlmSRvm6LaWjYvyPqsyxJMvBEJw==
   dependencies:
     aws-sdk "^2.1016.0"
 

@@ -1,8 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/ashkanjj/website-change-notifier/monitoring-daemon/monitoring"
 	"github.com/ashkanjj/website-change-notifier/monitoring-daemon/storage/dynamo"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 
@@ -13,28 +17,25 @@ type WatchedURL struct {
 }
 
 func main() {
-	// Get n number of websites and mark them as WATCHING
-	// If there are more websites than this daemon can handle, fargate should spawn another daemon to handle them
-	// We then need to somehow monitor when daemons go down
 
-	// but for phase 1
-	// get all the websites
-	// take a snapshot of the initial 
-	// websites := []WatchedURL{WatchedURL{userId: 3, url: "test", createdOn: ""}}
-	// 
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-2"),
+	})
 
-	r, err := dynamo.NewStorage()
+	if err != nil {
+    log.Fatalf("Got error creating session: %s", err)
+	}
 
-	println("r is ", r)
+	s, err := dynamo.NewStorage(sess)
 
 	if err != nil {
 		println("error connecting to dynamodb")
 	}
 
-	// TODO: next is pass the r to monitoring.NewService and get all the websites from dynamo (you'll need to add GetWebsites function to dynamo) 
-	s := monitoring.NewService()
+	monitoringService := monitoring.NewService(s)
 
+	// for now chunk up the list of websites and spawn off goroutines with n number of websites 
 
-	s.Process()
+	monitoringService.Process()
 }
 

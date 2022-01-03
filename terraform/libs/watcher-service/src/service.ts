@@ -42,6 +42,7 @@ export function registerURL(userId: number, url: string, createdOn: string) {
         userId,
         sk: 'URL#' + url,
         createdOn,
+        type: 'url',
       },
     })
     .promise();
