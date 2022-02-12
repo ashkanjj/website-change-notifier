@@ -3,6 +3,7 @@ package dynamo
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/ashkanjj/website-change-notifier/monitoring-daemon/core"
 	"github.com/aws/aws-sdk-go/aws"
@@ -59,8 +60,16 @@ func (s Storage) GetAllURLs() ([]core.URL, error)  {
 		return nil, errors.New(fmt.Sprintf("failed to unmarshal Dynamodb query Items, %v", err))
 	}
 
+	s.cleanURLs(recs)
 
 	return recs, err
+
+}
+
+func (s Storage) cleanURLs(recs []core.URL)  {
+	for i := range recs {
+		recs[i].Sk = strings.Replace(recs[i].Sk, "URL#", "", -1)
+	}
 
 }
 

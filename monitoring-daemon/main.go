@@ -17,7 +17,7 @@ type WatchedURL struct {
 }
 
 func main() {
-
+	
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("eu-west-2"),
 	})
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	s, err := dynamo.NewStorage(sess)
-
+	
 	if err != nil {
 		println("error connecting to dynamodb")
 	}
