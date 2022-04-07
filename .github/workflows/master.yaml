@@ -15,6 +15,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      - name: Create npmrc
+        run: |
+          echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' > ${{ github.workspace }}.npmrc
+          echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> ${{ github.workspace }}.npmrc
       - name: build all
         run: |
           cd src/lambdas/get_watcher
