@@ -15,4 +15,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
+      - name: build all
+        run: |
+          cd src/lambdas/get_watcher
+          npm install
+          npm build
+          cd src/lambdas/register_watcher
+          npm install
+          npm build
