@@ -22,6 +22,7 @@ jobs:
       - name: build all
         run: |
           cd src/lambdas/get_watcher
+          ls -la
           npm install
           npm build
           cd src/lambdas/register_watcher
