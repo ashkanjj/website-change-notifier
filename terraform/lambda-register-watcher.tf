@@ -8,8 +8,8 @@ resource "aws_s3_bucket" "register_watcher_lambda_bucket" {
 data "archive_file" "register_watcher_archive_file" {
   type = "zip"
   
-  source_dir  = "${path.module}/lambdas/register_watcher/dist"
-  output_path = "${path.module}/register_watcher.zip"
+  source_dir  = "${local.src}/lambdas/register_watcher/dist"
+  output_path = "${local.src}/lambdas/register_watcher.zip"
 }
 
 resource "aws_s3_bucket_object" "register_watcher_lambda_bucket_object" {
