@@ -19,10 +19,13 @@ jobs:
         run: |
           echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' > ${{ github.workspace }}.npmrc
           echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> ${{ github.workspace }}.npmrc
+      - name: is the file there
+        run: |
+          ls -la
+          cat .npmrc
       - name: build all
         run: |
           cd src/lambdas/get_watcher
-          ls -la
           npm install
           npm build
           cd src/lambdas/register_watcher
