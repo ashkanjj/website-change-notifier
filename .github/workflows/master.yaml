@@ -22,6 +22,8 @@ jobs:
       - name: is the file there
         run: |
           ls -la
+          echo ${{ github.workspace }}
+          echo "${{ github.workspace }}"
           cat .npmrc
       - name: build all
         run: |
