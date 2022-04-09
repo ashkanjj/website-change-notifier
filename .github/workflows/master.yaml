@@ -19,6 +19,7 @@ jobs:
         run: |
           echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' >> .npmrc
           echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> .npmrc
+          pwd
       - name: is the file there
         run: |
           ls -la
@@ -27,6 +28,7 @@ jobs:
           cat .npmrc
       - name: build all
         run: |
+          pwd
           cd src/lambdas/get_watcher
           npm ci
           npm build
