@@ -5,9 +5,9 @@ on:
       - master
 
 jobs:
-  build:
+  buildAndDeploy:
     runs-on: ubuntu-latest
-
+    name: Build and deploy
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16
@@ -28,15 +28,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  planAndDeploy:
-    runs-on: ubuntu-latest
-    name: Plan and deploy
-    defaults:
-      run:
-        working-directory: terraform
-    steps:
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+      
+      - name: Change Terraform directory
+        run: |
+        cd terraform
 
       - name: Terraform init
         run: |
