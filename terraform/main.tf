@@ -8,6 +8,12 @@ terraform {
 
   required_version = ">= 0.14.9"
 
+  backend "s3" {
+    bucket = "website-change-notifier-tf-state"
+    key = "terraform.tfstate"
+    region = "eu-west-2"
+  }
+
 }
 
 

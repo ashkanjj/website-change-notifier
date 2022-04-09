@@ -25,6 +25,34 @@ jobs:
       - name: build all
         run: |
           npm run build --workspaces
-
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  planAndDeploy:
+    runs-on: ubuntu-latest
+    name: Plan and deploy
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform init
+        run: |
+          terraform init -reconfigure
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+
+      - name: Terrraform validate
+        continue-on-error: true
+        run: |
+          terraform fmt -check
+
+      - name: Terrraform plan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+        run: |
+          terraform plan -input=false -refresh=true -out=plan.out
