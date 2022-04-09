@@ -31,13 +31,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Change Terraform directory
-        run: |
-          pwd
-          cd terraform
-          pwd
-
       - name: Terraform init
+        working-directory: terraform
         run: |
           pwd
           terraform init -reconfigure
@@ -47,10 +42,12 @@ jobs:
 
       - name: Terrraform validate
         continue-on-error: true
+        working-directory: terraform
         run: |
           terraform fmt -check
 
       - name: Terrraform plan
+        working-directory: terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
