@@ -28,13 +28,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-      
+
       - name: Change Terraform directory
         run: |
-        cd terraform
+          cd terraform
 
       - name: Terraform init
         run: |
