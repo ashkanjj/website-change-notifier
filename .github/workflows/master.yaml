@@ -17,8 +17,8 @@ jobs:
           cache: "npm"
       - name: Create npmrc
         run: |
-          echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' > ${{ github.workspace }}/.npmrc
-          echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> ${{ github.workspace }}/.npmrc
+          echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' >> .npmrc
+          echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> .npmrc
       - name: is the file there
         run: |
           ls -la
