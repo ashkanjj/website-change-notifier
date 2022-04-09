@@ -10,31 +10,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 16
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16"
           registry-url: "https://npm.pkg.github.com"
 
       - name: Create npmrc
         run: |
           echo '//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}' >> .npmrc
           echo '@ashkanjj:registry=https://npm.pkg.github.com/' >> .npmrc
-          pwd
-      - name: is the file there
-        run: |
-          ls -la
-          echo ${{ github.workspace }}
-          echo "${{ github.workspace }}"
-          cat .npmrc
+          npm ci
+
       - name: build all
         run: |
-          pwd
-          cd src/lambdas/get_watcher
-          npm ci
-          npm run build
-          cd src/lambdas/register_watcher
-          npm ci
-          npm run build
+          npm run build --workspaces
+
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
