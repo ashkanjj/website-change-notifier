@@ -32,9 +32,9 @@ jobs:
           pwd
           cd src/lambdas/get_watcher
           npm ci
-          npm build
+          npm run build
           cd src/lambdas/register_watcher
           npm ci
-          npm build
+          npm run build
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
