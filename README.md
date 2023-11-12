@@ -1,11 +1,49 @@
 ## Overview
 
-Given a url, takes a snapshot of the content initially but will let you know when something has changed
+Upon receiving a URL, this tool captures an initial snapshot of the content and alerts you if any changes occur. It also features an exclusion function allowing you to filter out specific content, such as cookies or other elements, from the output.
 
-There will also be a excluder functionality where you will be able to exclude certain content from the output (for things like cookie showing etc.)
+The user interface enables you to set up multiple web pages as needed. Additionally, it offers a feature-rich interface where you can specify and exclude particular text or HTML chunks, preventing them from triggering a change detection alert.
 
-Should have the UI where you can setup as many web pages as you like
-Should also have a UI where you can exclude certian text (HTML) chunks from being considered a change
+## Motivation
+
+This was a hubby project of mine aiming to get my hands dirty with Golang. While I initially planned to expand its features, I've had to set it aside temporarily due to pressing personal commitments.
+
+The inspiration for this project struck when I needed to secure an appointment from an embassy's website. They released a limited number of slots daily and I wanted to be one of the first people to be notified. This sort of websites usually don't require authentication and therefore it's easy to set up a crawler. However, I didn't want to be constantly checking the website and I wanted to be notified when the website changed. I also wanted to be able to exclude certain parts of the website from the change detection as they were irrelevant to me.
+
+## Ideas for future features
+
+- [ ] Create a microservice from the dameon in the monitoring-daemon/ folder
+- [ ] Finalise the UI to allow users to add exclusions and get snapshots
+
+## Architecture
+
+The architecture is based on AWS serverless components. The main components are:
+
+- API Gateway: to expose the API
+- Lambda: Lambda to register new URLs, add exclusions and get snapshots
+- DynamoDB: to store the snapshots
+
+![Architecture](./docs/website-change-notifier-technical-architecture.png)
+
+## How to run
+
+### Prerequisites
+
+- AWS account
+- AWS CLI
+- Golang
+- NodeJS
+
+After installing the above dependencies, run the following commands:
+
+```bash
+cd monitoring-daemon
+go run main.go
+```
+
+This will start the daemon that will constantly check for changes in the URLs that are being watched from the dynamo table currently hardcoded in repository.go file.
+
+```bash
 
 ## Components
 
@@ -146,3 +184,4 @@ Exclusions
   {
   url: string
   }
+```
