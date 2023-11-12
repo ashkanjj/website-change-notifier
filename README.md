@@ -41,10 +41,6 @@ cd monitoring-daemon
 go run main.go
 ```
 
-This will start the daemon that will constantly check for changes in the URLs that are being watched from the dynamo table currently hardcoded in repository.go file.
-
-```bash
-
 ## Components
 
 - Notifer: a cron job (could be a microservice) that constantly keeps track of all watching URLs and notify the users when something changed (could be done in Go)
@@ -184,4 +180,7 @@ Exclusions
   {
   url: string
   }
+
+```
+
 ```
