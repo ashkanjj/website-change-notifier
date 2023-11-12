@@ -30,6 +30,7 @@ The architecture is based on AWS serverless components. The main components are:
 ### Prerequisites
 
 - AWS account
+- Terraform
 - AWS CLI
 - Golang
 - NodeJS
